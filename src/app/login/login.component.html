@@ -1,0 +1,35 @@
+<!-- Home/Login Page -->
+
+<div class = "screen">
+    <!-- Div element contains welcome message and login form -->
+    <div class = "box position-absolute top-50 start-50 translate-middle">
+        <!-- Welcome message -->
+        <h1 class = "title">Welcome to<br>Chatroom</h1>
+
+        <!-- Login Form -->
+        <form>
+            <!-- Error message for invalid user -->
+            <!-- <div *ngIf = "!valid">
+                <p color = "red" class = "text-center">Incorrect email or password.</p>
+            </div> -->
+
+            <!-- Email input -->
+            <div class = "form-outline mb-4">
+                <input type = "email" id = "email" class = "form-control" placeholder = "Email" />
+            </div>
+        
+            <!-- Password input -->
+            <div class = "form-outline mb-4">
+                <input type = "password" id = "pwd" class = "form-control" placeholder = "Password" />
+            </div>
+        
+            <!-- Submit button -->
+            <div class = "d-grid gap-2 mx-auto">
+                <button type = "button" class = "btn" routerLink = "/account"><strong>LOGIN</strong></button>        
+            </div>  
+        </form> 
+
+    </div>
+</div>
+
+
