@@ -2,17 +2,21 @@
 
 <div class = "screen">
     <div class = "container">
-        <div class = "row" id = "user"><h1>USERNAME</h1></div> 
-        <!-- Logout button top right corner -->
-        <div class = "row" id = "user-data">
-            <div class = "col-sm-3" id = "user-pfp">
-                <img src = "../../assets/img/user.png" class = "img-thumbnail">
+        <div class = "row" id = "user">
+            <div class = "col-10" id = "username"><h1>USERNAME</h1></div>
+            <div class = "col-2" id = "logout">
+            <button type = "button" class = "btn" routerLink = "/"><strong>LOGOUT</strong></button>        
             </div>
-            <div class = "col-sm-9" id = "user-details">
-                User Detail (email, ID) 
-                <table>
-                    <tr><td>ID</td><td>: 012345679</td></tr>
-                    <tr><td>Email</td><td>: abcabc@example.com</td></tr>
+        </div>
+        <div class = "row py-1" id = "user-data">
+            <div class = "col-sm-3 position-relative" id = "user-pfp">
+                <img src = "../../assets/img/user.png" class = "img-thumbnail position-absolute top-50 start-50 translate-middle">
+            </div>
+            <div class = "col-sm position-relative" id = "user-details">
+                <table class = "ms-3 position-absolute top-50 start-0 translate-middle-y">
+                    <tr><th>ID</th><td>012345679</td></tr>
+                    <tr><th>Email</th><td>abcabc@example.com</td></tr>
+                    <tr><th>Last active</th><td>02 Aug 2022</td></tr>
                 </table>
             </div>   
         </div>
@@ -20,29 +24,55 @@
         <hr>
 
         <div class = "row" id = "groups">
-            <h2>Groups</h2>
-            <div class = "table-responsive-sm">
-                <table class = "table">
-                    <tr>
-                        <td>group1
-                            <img src = "../../assets/img/user.png" class = "img-thumbnail">
-                        </td>
-                        <td>group2
-                            <img src = "../../assets/img/user.png" class = "img-thumbnail">
-                        </td>
-                        <td>group3
-                            <img src = "../../assets/img/user.png" class = "img-thumbnail">
-                        </td>
-                        <td>group4
-                            <img src = "../../assets/img/user.png" class = "img-thumbnail">
-                        </td>
-                        <td>group5
-                            <img src = "../../assets/img/user.png" class = "img-thumbnail">
-                        </td>
-                        <!-- Hover over name or pic, show accessible channels in drop down menu -->
-                    </tr>
-                </table>    
-            </div>
+            <h2>Group (5)</h2>
+                <div class = "col-sm-3">
+                    <div class = "dropdown" (mouseenter) = "channelMenu1()" (mouseleave) = "channelMenu1()">
+                        <p class = "groupname">group1</p>
+                        <img src = "../../assets/img/user.png" class = "img-thumbnail rounded-circle">
+                    <!-- <div *ngIf = "group1"> -->
+                        <div class = "dropdown-content">
+                            <a class = "dropdown-item">Channel A</a>
+                            <a class = "dropdown-item">Channel B</a>
+                            <a class = "dropdown-item">Channel C</a>
+                        </div>
+                    <!-- </div> -->
+                    </div>
+                </div>
+                <div class = "col-sm-3">
+                    <div class = "dropdown" (mouseenter) = "channelMenu1()" (mouseleave) = "channelMenu1()">
+                        <p class = "groupname">group1</p>
+                        <img src = "../../assets/img/user.png" class = "img-thumbnail rounded-circle">
+                        <!-- <div *ngIf = "group1"> -->
+                            <div class = "dropdown-content">
+                                <a class = "dropdown-item">Channel A</a>
+                                <a class = "dropdown-item">Channel B</a>
+                                <a class = "dropdown-item">Channel C</a>
+                            </div>
+                        <!-- </div> -->
+                        </div>
+                </div>
+                <div class = "col-sm-3">
+                    <div class = "dropdown" (mouseenter) = "channelMenu1()" (mouseleave) = "channelMenu1()">
+                        <h5 class = "groupname">group1</h5>
+                        <img src = "../../assets/img/user.png" class = "img-thumbnail rounded-circle">
+                    </div>
+                </div>
+                <div class = "col-sm-3">
+                    <div class = "dropdown" (mouseenter) = "channelMenu1()" (mouseleave) = "channelMenu1()">
+                        <h5 class = "groupname">group1</h5>
+                        <img src = "../../assets/img/user.png" class = "img-thumbnail rounded-circle">
+                        </div>
+                </div>
+                <div class = "col-sm-3">
+                    <div class = "dropdown" (mouseenter) = "channelMenu1()" (mouseleave) = "channelMenu1()">
+                        <p class = "groupname">group1</p>
+                        <img src = "../../assets/img/user.png" class = "img-thumbnail rounded-circle">
+
+                        </div>
+                </div>
+
+            
+            
             
         </div>
         
@@ -54,3 +84,4 @@
 
 
 </div>
+

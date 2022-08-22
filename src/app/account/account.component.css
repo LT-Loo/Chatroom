@@ -1,8 +1,96 @@
 .screen {
     background: linear-gradient(to top, #5b95e7 0%, #a3e9ee 100%);
-    height: 100vh;
+    min-height: 100vh;
 }
 
-#user, #user-pfp, #name, #pic, #user-data, #user-details {
+.container {
+    width: 80%;
+    min-height: 100vh;
+    background: rgba(255, 255, 255, 0.6);
+    padding: 20px;
+}
+
+#group-row, #logout, #user, #user-pfp, #name, #pic, #user-data, #user-details, #group-table, #group-table td, #groups, .dropdown {
     border: black solid 1px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    text-align: center;
+    margin-bottom: 3%;
+} 
+
+.groupname {
+    font-size: 2.2vw;
+    font-weight: 550;
+    margin-bottom: 5px;
+}
+
+.dropdown-content {
+    display: block;
+    position: absolute;
+    width: 100%;
+    z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {display: block;}
+
+.dropdown-item {
+    border: black solid 1px;
+    border-radius: 50px;
+    background:rgba(119, 119, 119, 0.9);
+    font-size: 1.7vw;
+    color: black;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    margin-top: 3px;
+}
+
+.dropdown img {
+    height: 65%;
+    width: 65%;
+}
+
+#logout {
+    position: relative;
+}
+
+.btn {
+    font-style: bold;
+    color: #03227e;
+    border: #03227e solid 1.75px;
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    padding: 5px;
+}
+
+.btn:hover {
+    color: #011864;
+    border: #011864 solid 1.75px;
+    background: rgba(57, 96, 165, 0.4);
+}
+
+.btn:active {
+    color: #071131;
+    border: #071131 solid 1.75px;
+    background: rgba(13, 25, 57, 0.4);
+}
+
+img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+#user-pfp {
+    height: 155px;
+    width: 155px;
+}
+
+#user-details td{
+    padding-left: 20px;
+    color: #363636;
 }
