@@ -10,7 +10,7 @@
     padding: 20px;
 }
 
-#group-row, #logout, #user, #user-pfp, #name, #pic, #user-data, #user-details, #group-table, #group-table td, #groups, .dropdown {
+.col-lg, #group-row, #logout, #user, #user-pfp, #name, #pic, #user-data, #user-details, #group-table, #group-table td, #groups, .dropdown {
     border: black solid 1px;
 }
 
@@ -18,7 +18,7 @@
     position: relative;
     display: inline-block;
     text-align: center;
-    margin-bottom: 3%;
+    margin-bottom: 10px;
 } 
 
 .groupname {
@@ -28,9 +28,11 @@
 }
 
 .dropdown-content {
-    display: block;
+    display: none;
     position: absolute;
-    width: 100%;
+    width: 82%;
+    margin: auto;
+    border: black solid 1px;
     z-index: 1;
 }
 
@@ -40,7 +42,6 @@
     border: black solid 1px;
     border-radius: 50px;
     background:rgba(119, 119, 119, 0.9);
-    font-size: 1.7vw;
     color: black;
     padding-left: 10px;
     padding-right: 10px;
@@ -50,8 +51,8 @@
 }
 
 .dropdown img {
-    height: 65%;
-    width: 65%;
+    height: 90px;
+    width: 90px;
 }
 
 #logout {
@@ -93,4 +94,8 @@ img {
 #user-details td{
     padding-left: 20px;
     color: #363636;
+}
+
+.col-lg {
+    padding: 15px;
 }

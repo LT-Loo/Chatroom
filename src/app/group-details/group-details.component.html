@@ -1,0 +1,42 @@
+<!-- Group Details Modal -->
+
+<div class = "modal-header">
+    <h5 class = "modal-title">Group Name (XX)</h5>
+    <button type = "button" class = "btn-close" (click) = "closeModal('close')"></button>
+</div>
+
+<div class = "modal-body">
+    <p class = "fw-light mt-0">Joined on dd mmm yyyy</p>
+    <p>Your Role: xxxx</p>
+    <hr>
+    <div class = "container">
+        <div class = "row">
+            <p><i class = "bi bi-chat-dots pe-1"></i>Online Members: XX</p>
+        </div>
+        <div class = "row row-cols-3 row-cols-lg-4">
+            <div class = "col-lg border">
+                Channel Name
+            </div>
+            <div class = "col-lg border">
+                Channel Name
+            </div>
+            <div class = "col-lg border">
+                Channel Name
+            </div>
+            <div class = "col-lg border">
+                Channel Name
+            </div>
+            <div class = "col-lg border">
+                Channel Name
+            </div>
+            <div class = "col-lg border">
+                Channel Name
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class = "modal-footer">
+    <button type = "button" class = "btn btn-secondary" data-dismiss = "modal" (click) = "closeModal('close')">Close</button>
+    <button type = "button" class = "btn btn-primary" (click) = "closeModal('changes saved!')">Save Changes</button>
+</div>

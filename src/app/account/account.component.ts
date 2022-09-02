@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
+import { GroupDetailsComponent } from '../group-details/group-details.component';
 
 @Component({
   selector: 'app-account',
@@ -13,9 +16,10 @@ export class AccountComponent implements OnInit {
   group4: boolean = false;
   group5: boolean = false;
 
-  constructor() { }
+  constructor(private modalService: NgbModal) { }
 
   ngOnInit(): void {
+    this.groupDetailsModal();
   }
 
   channelMenu1() {
@@ -43,5 +47,24 @@ export class AccountComponent implements OnInit {
     else {this.group4 = true;}
   }
 
+  groupDetailsModal() {
+    const modal = this.modalService.open(GroupDetailsComponent, {
+      scrollable: true,
+      windowClass: 'myCustomModalClass',
+      size: 'lg',
+      centered: true
+    });
+
+    let data = {
+      prop1: "Some Data",
+      prop2: "From Parent Component",
+      prop3: "This can be anything"
+    };
+
+    modal.componentInstance.fromParent = data;
+    modal.result.then((result) => {
+      console.log(result);
+    });
+  }
 
 }
