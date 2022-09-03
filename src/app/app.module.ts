@@ -8,13 +8,15 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { AccountComponent } from './account/account.component';
 import { GroupDetailsComponent } from './group-details/group-details.component';
+import { ChannelComponent } from './channel/channel.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     AccountComponent,
-    GroupDetailsComponent
+    GroupDetailsComponent,
+    ChannelComponent
   ],
   imports: [
     BrowserModule,

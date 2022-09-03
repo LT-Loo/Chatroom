@@ -5,17 +5,19 @@
         <div class = "row" id = "user">
             <div class = "col-10" id = "username"><h1>USERNAME</h1></div>
             <div class = "col-2" id = "logout">
-            <button type = "button" class = "btn" routerLink = "/"><strong>LOGOUT</strong></button>        
+                <button type = "button" class = "logout btn" routerLink = "/"><strong>LOGOUT</strong></button>        
             </div>
         </div>
-        <div class = "row py-1" id = "user-data">
-            <div class = "col-sm-3 position-relative" id = "user-pfp">
+        <hr class = "mt-1">
+        <div class = "row py-1 mx-auto" id = "user-data">
+            <div class = "col-3 position-relative" id = "user-pfp">
                 <img src = "../../assets/img/user.png" class = "img-thumbnail position-absolute top-50 start-50 translate-middle">
             </div>
-            <div class = "col-sm position-relative" id = "user-details">
-                <table class = "ms-3 position-absolute top-50 start-0 translate-middle-y">
+            <div class = "col position-relative" id = "user-details">
+                <table class = "ms-4 position-absolute top-50 start-0 translate-middle-y">
                     <tr><th>ID</th><td>012345679</td></tr>
                     <tr><th>Email</th><td>abcabc@example.com</td></tr>
+                    <tr><th>Role</th><td>Super Admin</td></tr> <!-- If Super/Group/Admin/Assis-->
                     <tr><th>Last active</th><td>02 Aug 2022</td></tr>
                 </table>
             </div>   
@@ -23,9 +25,14 @@
 
         <hr>
 
-        <div class = "row" id = "groups">
-            <h2>Group (5)</h2>
-            <div class = "container text-center p-0 m-auto w-100">
+        <div class = "row mx-auto" id = "groups">
+            <div class = "row m-0 px-0 pb-1">
+                <div class = "col p-0"><h2>Group (5)</h2></div>
+                <div class = "col text-end p-0">
+                    <button type = "button" class = "btn btn-primary py-1">Create Group</button>
+                </div>
+            </div>
+            <div class = "container bg-transparent text-center p-0 m-auto w-100">
                 <div class = "row row-cols-3 row-cols-lg-6 p-0 m-0">
                     <div class = "dropdown col-lg" id = "group">
                         <h5>Group1</h5>

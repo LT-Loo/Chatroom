@@ -19,7 +19,7 @@ export class AccountComponent implements OnInit {
   constructor(private modalService: NgbModal) { }
 
   ngOnInit(): void {
-    this.groupDetailsModal();
+    // this.groupDetailsModal();
   }
 
   channelMenu1() {
