@@ -1,1 +1,210 @@
-<p>channel works!</p>
+<!-- Channel Page -->
+
+<div class = "screen">
+    <div class = "channel-sidebar offcanvas offcanvas-start" id = "channel-sidebar">
+        <div class = "offcanvas-header border py-2">
+            <h5 class = "offcanvas-title">GROUPNAME</h5>
+            <button type = "button" class = "btn-close" data-bs-dismiss = "offcanvas"></button> 
+        </div>
+        <div class = "offcanvas-body">
+            <ul class = "list-group text-center">
+                <li class = "list-group-item">Channel 1</li>
+                <li class = "list-group-item">Channel 1</li>
+                <li class = "list-group-item">Channel 1</li>
+                <li class = "list-group-item">Channel 1</li>
+            </ul>
+        </div>
+        <div class = "position-absolute bottom-0 start-50 translate-middle-x mb-2">
+            <button type = "button" class = "btn btn-primary text-nowrap">LEAVE CHAT</button>
+        </div>
+    </div>
+    <div class = "member-canvas offcanvas offcanvas-end">
+        <div class = "offcanvas-header border py-2">
+            <h5 class = "offcanvas-title">MEMBER</h5>
+            <button type = "button" class = "btn-close" data-bs-dismiss = "offcanvas"></button>
+        </div>
+        <div class = "offcanvas-body pt-2">
+            <ul class = "member-list ps-0">
+                <li><i class = "bi bi-chat-dots-fill pe-2"></i>User ABC</li>
+                <li><i class = "bi bi-moon pe-2"></i>User 123456</li>
+            </ul>
+        </div>
+    </div>
+    <div class = "row m-0 min-vh-100">
+        <div class = "offcanvas-lg col-2 border p-0" id = "channellistcol">
+            <div class = "container position-relative border border-primary m-auto h-100 text-center">
+                <h3 class = "mt-2">GROUPNAME</h3> 
+                <hr class = "mt-1"> 
+                <ul class = "list-group">
+                    <li class = "list-group-item">Channel 1</li>
+                    <li class = "list-group-item">Channel 1</li>
+                    <li class = "list-group-item">Channel 1</li>
+                    <li class = "list-group-item">Channel 1</li>
+                </ul>
+                <div class = "position-absolute bottom-0 start-50 translate-middle-x mb-2">
+                    <button type = "button" class = "btn btn-primary text-nowrap">LEAVE CHAT</button>
+                </div>
+            </div> 
+        </div>
+        <div class = "col-lg-8 border">
+            <div class = "container position-relative border border-success vh-100">
+                <h3 class = "mt-2">CHANNELNAME</h3>
+                <button type = "button" class = "btn btn-primary" data-bs-toggle = "offcanvas" data-bs-target = "#channellistcol">Group</button>
+                <hr class = "mt-1">
+                <div class = "chat-wrapper overflow-auto d-inline-block w-100">
+                <table class = "table-borderless w-100 mb-0">
+                    <tbody>
+                        <tr>
+                            <td class = "pfp px-0 align-top"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
+                            <td class = "ps-2 ">
+                                <h6 class = "d-inline-block mb-0">User</h6>
+                                <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>
+                                <p class = "mb-1 ">Hi everyone!<br>hihi<br>hihi</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class = "alert text-center py-0" colspan = "2">
+                                <p class = "m-0">User left/joined the channel.</p>
+                            </td> 
+                        </tr>
+                        <tr>
+                            <td class = "pfp px-0"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
+                            <td class = "ps-2">
+                                <h6 class = "d-inline-block mb-0">User</h6>
+                                <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>
+                                <p class = "mb-1 text-break">Hi everyonesssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss!</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class = "pfp px-0"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
+                            <td class = "ps-2">
+                                <h6 class = "d-inline-block mb-0">User</h6>
+                                <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>
+                                <p class = "mb-1">Hi everyone!</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class = "pfp px-0"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
+                            <td class = "ps-2">
+                                <h6 class = "d-inline-block mb-0">User</h6>
+                                <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>
+                                <p class = "mb-1">Hi everyone!</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class = "pfp px-0"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
+                            <td class = "ps-2">
+                                <h6 class = "d-inline-block mb-0">User</h6>
+                                <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>
+                                <p class = "mb-1">Hi everyone!</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class = "pfp px-0"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
+                            <td class = "ps-2">
+                                <h6 class = "d-inline-block mb-0">User</h6>
+                                <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>
+                                <p class = "mb-1">Hi everyone!</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class = "pfp px-0"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
+                            <td class = "ps-2">
+                                <h6 class = "d-inline-block mb-0">User</h6>
+                                <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>
+                                <p class = "mb-1">Hi everyone!</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class = "pfp px-0"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
+                            <td class = "ps-2">
+                                <h6 class = "d-inline-block mb-0">User</h6>
+                                <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>
+                                <p class = "mb-1">Hi everyone!</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class = "pfp px-0"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
+                            <td class = "ps-2">
+                                <h6 class = "d-inline-block mb-0">User</h6>
+                                <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>
+                                <p class = "mb-1">Hi everyone!</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <!-- <div class = "chat">
+                    <div class = "message row mb-2">
+                        <div class = "col-2 col-lg-1 border">
+                            <img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle">
+                        </div>
+                        <div class = "col py-1 ps-2">
+                            <h6 class = "d-inline-block mb-0">User</h6>
+                            <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>
+                            <p class = "mb-0">Hi everyone!<br>hihi<br>hihi</p>
+                        </div>
+                       
+                    </div>
+                    <div class = "message row mb-2">
+                        <div class = "col-1">
+                            <img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle">
+                        </div>
+                        <div class = "col py-1 ps-2">
+                            <h6 class = "d-inline-block mb-0">User</h6>
+                            <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>
+                            <p class = "mb-0">Hi everyone!!!</p>
+                        </div>
+                       
+                    </div>
+                    <div class = "alert row mb-2 text-center py-0">
+                        <p class = "m-0">User left/joined the channel.</p>
+                    </div>
+                    <div class = "message row mb-2">
+                        <div class = "col-1">
+                            <img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle">
+                        </div>
+                        <div class = "col py-1 ps-2">
+                            <h6 class = "d-inline-block mb-0">User</h6>
+                            <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>
+                            <p class = "mb-0">Hi everyone!hihi</p>
+                        </div>
+                       
+                    </div>
+                    <div class = "message row mb-2">
+                        <div class = "col-1">
+                            <img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle">
+                        </div>
+                        <div class = "col py-1 ps-2">
+                            <h6 class = "d-inline-block mb-0">User</h6>
+                            <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>
+                            <p class = "mb-0">Hi everyone!hihi</p>
+                        </div>
+                       
+                    </div>
+                </div> -->
+                <div class = "row position-absolute bottom-0 w-100 py-2">
+                    <div class = "col ps-2 pe-1">
+                        <input class = "form-control" name = "message" placeholder = "Write a message...">   
+                    </div>
+                    <div class = "col-1 text-center px-1">
+                        <button class = "btn btn-primary" type = "button">Send</button>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <!-- <div class = "col-2 border border-danger">
+            <h3 class = "mt-2 text-center">MEMBERS</h3>
+            <hr class = "mt-1">
+            <div>
+                <ul class = "member-list ps-2">
+                    <li><i class = "bi bi-chat-dots-fill pe-2"></i>User ABC</li>
+                    <li><i class = "bi bi-moon pe-2"></i>User 123</li>
+                </ul>
+            </div>
+        </div>     -->
+    </div>
+    
+    
+</div>

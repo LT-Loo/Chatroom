@@ -1,0 +1,51 @@
+.screen {
+    background: linear-gradient(to top, #5b95e7 0%, #a3e9ee 100%);
+    min-height: 100vh;
+}
+
+.bi {
+    vertical-align: 0.125em;
+}
+
+.chat-pfp {
+    height: 55px;
+    width: 55px;
+}
+
+.msg-date {
+    font-size: small;
+    color: grey;
+}
+
+.alert {
+    font-size: 15px;
+    color: #555555;
+}
+
+.member-list {
+    list-style-type: none;
+}
+
+.channel-sidebar {
+    width: 35%;
+}
+
+.member-canvas {
+    width: 30%;
+}
+
+.pfp {
+    width: 30px;
+}
+
+.table-borderless td {
+    padding-bottom: 7px;
+}
+
+.chat-wrapper {
+    height: 75%;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+}
