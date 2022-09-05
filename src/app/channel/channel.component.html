@@ -1,69 +1,40 @@
 <!-- Channel Page -->
 
 <div class = "screen">
-    <div class = "channel-sidebar offcanvas offcanvas-start" id = "channel-sidebar">
-        <div class = "offcanvas-header border py-2">
-            <h5 class = "offcanvas-title">GROUPNAME</h5>
-            <button type = "button" class = "btn-close" data-bs-dismiss = "offcanvas"></button> 
-        </div>
-        <div class = "offcanvas-body">
-            <ul class = "list-group text-center">
-                <li class = "list-group-item">Channel 1</li>
-                <li class = "list-group-item">Channel 1</li>
-                <li class = "list-group-item">Channel 1</li>
-                <li class = "list-group-item">Channel 1</li>
-            </ul>
-        </div>
-        <div class = "position-absolute bottom-0 start-50 translate-middle-x mb-2">
-            <button type = "button" class = "btn btn-primary text-nowrap">LEAVE CHAT</button>
-        </div>
-    </div>
-    <!-- <div class = "member-canvas offcanvas offcanvas-end">
-        <div class = "offcanvas-header border py-2">
-            <h5 class = "offcanvas-title">MEMBER</h5>
-            <button type = "button" class = "btn-close" data-bs-dismiss = "offcanvas"></button>
-        </div>
-        <div class = "offcanvas-body pt-2">
-            <ul class = "member-list ps-0">
-                <li><i class = "bi bi-chat-dots-fill pe-2"></i>User ABC</li>
-                <li><i class = "bi bi-moon pe-2"></i>User 123456</li>
-            </ul>
-        </div>
-    </div> -->
-    <div class = "row m-0 min-vh-100">
-        <!-- <div class = "col-2 border p-0" id = "channellistcol">
-            <div class = "container position-relative border border-primary m-auto h-100 text-center">
-                <h3 class = "mt-2">GROUPNAME</h3> 
-                <hr class = "mt-1"> 
-                <ul class = "list-group">
-                    <li class = "list-group-item">Channel 1</li>
-                    <li class = "list-group-item">Channel 1</li>
-                    <li class = "list-group-item">Channel 1</li>
-                    <li class = "list-group-item">Channel 1</li>
-                </ul>
-                <div class = "position-absolute bottom-0 start-50 translate-middle-x mb-2">
+    <div class = "row m-0 h-100 border">
+        <div class = "offcanvas-lg offcanvas-start col-2 p-0" id = "channel-listcol">
+            <div class = "container position-relative m-auto vh-100">
+                <h3 id = "groupname" class = "mt-2 text-center">GROUPNAME</h3> 
+                <button id = "close-sidebar-btn" type = "button" class = "btn-close offset-1" data-bs-dismiss = "offcanvas" data-bs-target = "#channel-listcol"></button>
+                <hr class = "mt-1">
+                <div class = "list-wrapper overflow-auto d-inline-block w-100">
+                    <ul class = "list-group text-center">
+                        <li class = "list-group-item">Channel 1</li>
+                        <li class = "list-group-item">Channel 1</li>
+                        <li class = "list-group-item">Channel 1</li>
+                        <li class = "list-group-item">Channel 1</li>
+                        <li class = "list-group-item">Channel 1</li>
+                        <li class = "list-group-item">Channel 1</li>
+                        <li class = "list-group-item">Channel C</li>
+                        <li class = "list-group-item">Channel B</li>
+                        <li class = "list-group-item">Channel A</li>
+                        <li class = "list-group-item">Channel A</li>
+                        <li class = "list-group-item">Channel A</li>
+                        <li class = "list-group-item">Channel A</li>
+                        <li class = "list-group-item">Channel A</li>
+                        <li class = "list-group-item">Channel A</li>
+                        <li class = "list-group-item">Channel A</li>
+                        <li class = "list-group-item">Channel A</li>
+                    </ul>    
+                </div> 
+                
+                <div class = "position-absolute bottom-0 start-50 translate-middle-x mb-3">
                     <button type = "button" class = "btn btn-primary text-nowrap">LEAVE CHAT</button>
                 </div>
             </div> 
-        </div> -->
-        <div class = "offcanvas-lg offcanvas-start col-2 border p-0" id = "channel-listcol">
-            <div class = "container position-relative border border-primary m-auto h-100">
-                <h3 id = "groupname" class = "mt-2 text-center">GROUPNAME</h3> 
-                <button id = "close-sidebar-btn" type = "button" class = "btn-close offset-1" data-bs-dismiss = "offcanvas" data-bs-target = "#channel-listcol"></button>
-                <hr class = "mt-1"> 
-                <ul class = "list-group text-center">
-                    <li class = "list-group-item">Channel 1</li>
-                    <li class = "list-group-item">Channel 1</li>
-                    <li class = "list-group-item">Channel 1</li>
-                    <li class = "list-group-item">Channel 1</li>
-                </ul>
-                <div class = "position-absolute bottom-0 start-50 translate-middle-x mb-2">
-                    <button type = "button" class = "btn btn-primary text-nowrap">LEAVE CHAT</button>
-                </div>
-            </div>
-        </div>
-        <div class = "col-lg-8 border">
-            <div class = "container position-relative border border-success vh-100">
+        </div> 
+        <div class = "col-lg-8">
+            <div class = "container position-relative vh-100">
                 <button id = "open-channel-sidebar" type = "button" class = "btn btn-outline-primary px-2 py-0 mb-2" data-bs-toggle = "offcanvas" data-bs-target = "#channel-listcol"><i class = "bi bi-list"></i></button>
                 <h3 id = "channelname" class = "mt-2">CHANNELNAME</h3>
                 <button id = "open-member-sidebar" type = "button" class = "btn btn-outline-secondary px-2 py-0 mb-2 position-absolute end-0" data-bs-toggle = "offcanvas" data-bs-target = "#memberlistcol"><i class = "bi bi-people-fill"></i></button>    
@@ -151,56 +122,7 @@
                     </tbody>
                 </table>
                 </div>
-                <!-- <div class = "chat">
-                    <div class = "message row mb-2">
-                        <div class = "col-2 col-lg-1 border">
-                            <img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle">
-                        </div>
-                        <div class = "col py-1 ps-2">
-                            <h6 class = "d-inline-block mb-0">User</h6>
-                            <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>
-                            <p class = "mb-0">Hi everyone!<br>hihi<br>hihi</p>
-                        </div>
-                       
-                    </div>
-                    <div class = "message row mb-2">
-                        <div class = "col-1">
-                            <img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle">
-                        </div>
-                        <div class = "col py-1 ps-2">
-                            <h6 class = "d-inline-block mb-0">User</h6>
-                            <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>
-                            <p class = "mb-0">Hi everyone!!!</p>
-                        </div>
-                       
-                    </div>
-                    <div class = "alert row mb-2 text-center py-0">
-                        <p class = "m-0">User left/joined the channel.</p>
-                    </div>
-                    <div class = "message row mb-2">
-                        <div class = "col-1">
-                            <img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle">
-                        </div>
-                        <div class = "col py-1 ps-2">
-                            <h6 class = "d-inline-block mb-0">User</h6>
-                            <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>
-                            <p class = "mb-0">Hi everyone!hihi</p>
-                        </div>
-                       
-                    </div>
-                    <div class = "message row mb-2">
-                        <div class = "col-1">
-                            <img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle">
-                        </div>
-                        <div class = "col py-1 ps-2">
-                            <h6 class = "d-inline-block mb-0">User</h6>
-                            <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>
-                            <p class = "mb-0">Hi everyone!hihi</p>
-                        </div>
-                       
-                    </div>
-                </div> -->
-                <div class = "row position-absolute bottom-0 w-100 py-2">
+                <div class = "row position-absolute bottom-0 w-100 py-3">
                     <div class = "col ps-2 pe-1">
                         <input class = "form-control" name = "message" placeholder = "Write a message...">   
                     </div>
@@ -211,18 +133,16 @@
                 </div>
             </div>
         </div>
-        <div class = "offcanvas-lg offcanvas-end col-2 border border-danger" id = "memberlistcol">
+        <div class = "offcanvas-lg offcanvas-end col-2" id = "memberlistcol">
             <button id = "close-member-btn" type = "button" class = "btn-close" data-bs-dismiss = "offcanvas" data-bs-target = "#memberlistcol"></button>
             <h3 id = "memberlist" class = "mt-2 text-center">MEMBERS</h3>
             <hr class = "mt-1">
-            <div>
+            <div class = "member-wrapper  overflow-auto d-inline-block w-100">
                 <ul class = "member-list ps-2">
                     <li><i class = "bi bi-chat-dots-fill pe-2"></i>User ABC</li>
                     <li><i class = "bi bi-moon pe-2"></i>User 123</li>
                 </ul>
             </div>
         </div>    
-    </div>
-    
-    
+    </div> 
 </div>

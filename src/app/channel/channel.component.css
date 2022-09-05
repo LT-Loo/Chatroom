@@ -1,6 +1,8 @@
 .screen {
     background: linear-gradient(to top, #5b95e7 0%, #a3e9ee 100%);
-    min-height: 100vh;
+    height: 100%;
+    width: 100%;
+    position: fixed;
 }
 
 .bi {
@@ -87,7 +89,7 @@
     padding-bottom: 7px;
 }
 
-.chat-wrapper {
+.chat-wrapper, .list-wrapper, .member-wrapper {
     height: 80%;
 }
 
