@@ -26,13 +26,58 @@
     list-style-type: none;
 }
 
-.channel-sidebar {
-    width: 35%;
+
+#close-sidebar-btn, #open-channel-sidebar, #close-member-btn, #open-member-sidebar {
+    display: none;
+    visibility: hidden;
 }
 
-.member-canvas {
-    width: 30%;
+@media screen and (max-width: 1200px) {
+    #close-sidebar-btn {
+        display: inline-block;
+        visibility: visible;
+        margin-left: 16px;
+    }
+
+    #close-member-btn {
+        display: inline-block;
+        visibility: visible;
+    }
+
+    #groupname, #memberlistcol {
+        display: inline-block;
+        margin-bottom: 5px;
+    }
+
+    #memberlist {
+        display: inline-block;
+        margin-bottom: 5px;
+        padding-left: 23px;
+    }
+
+    #channel-listcol, #memberlistcol {
+        width: 35%;
+    }
+
+    #channelname {
+        display: inline-block;
+        padding-left: 7px;
+        margin: auto;
+    }
+
+    #open-channel-sidebar, #open-member-sidebar {
+        display: inline-block;
+        visibility: visible;
+    }
+
+    #open-member-sidebar {
+        display: inline-block;
+        visibility: visible;
+        margin-top: 9px;
+        margin-right: 12px;
+    }
 }
+
 
 .pfp {
     width: 30px;
@@ -43,7 +88,7 @@
 }
 
 .chat-wrapper {
-    height: 75%;
+    height: 80%;
 }
 
 ::-webkit-scrollbar {
