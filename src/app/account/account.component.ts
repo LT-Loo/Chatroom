@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { GroupDetailsComponent } from '../group-details/group-details.component';
 
@@ -10,56 +11,88 @@ import { GroupDetailsComponent } from '../group-details/group-details.component'
 })
 export class AccountComponent implements OnInit {
 
-  group1: boolean = false;
-  group2: boolean = false;
-  group3: boolean = false;
-  group4: boolean = false;
-  group5: boolean = false;
+  constructor(private modalService: NgbModal,
+    private router: Router,
+    private route: ActivatedRoute) { }
 
-  constructor(private modalService: NgbModal) { }
+  user: any = {};
+  userID: any = "";
+
+  groups = [
+    {id: 1, name: "3813ICT", dateTime: new Date().toUTCString()},
+    {id: 2, name: "Dance Club", dateTime: new Date().toUTCString()},
+    {id: 3, name: "CS Club", dateTime: new Date().toUTCString()},
+    {id: 4, name: "Griffith", dateTime: new Date().toUTCString()},
+    {id: 5, name: "Study Group", dateTime: new Date().toUTCString()},
+    {id: 6, name: "Swim Club", dateTime: new Date().toUTCString()},
+    {id: 7, name: "Pets", dateTime: new Date().toUTCString()}
+  ];
+
+  channels = [
+    {id: 1, groupID: 1, name: "General", dateTime: new Date().toUTCString()},
+    {id: 2, groupID: 1, name: "Assignment", dateTime: new Date().toUTCString()},
+    {id: 3, groupID: 2, name: "Jazz Dance", dateTime: new Date().toUTCString()},
+    {id: 4, groupID: 2, name: "Hip Hop", dateTime: new Date().toUTCString()},
+    {id: 5, groupID: 2, name: "House", dateTime: new Date().toUTCString()},
+    {id: 6, groupID: 3, name: "General", dateTime: new Date().toUTCString()},
+    {id: 7, groupID: 3, name: "Software Eng", dateTime: new Date().toUTCString()},
+    {id: 8, groupID: 3, name: "Soft Frame", dateTime: new Date().toUTCString()},
+    {id: 9, groupID: 3, name: "Web App Dev", dateTime: new Date().toUTCString()},
+    {id: 10, groupID: 4, name: "General", dateTime: new Date().toUTCString()},
+    {id: 11, groupID: 5, name: "Discussion", dateTime: new Date().toUTCString()},
+    {id: 12, groupID: 6, name: "Events", dateTime: new Date().toUTCString()},
+    {id: 13, groupID: 7, name: "Adopt", dateTime: new Date().toUTCString()},
+  ];
 
   ngOnInit(): void {
-    // this.groupDetailsModal();
+    
+    this.route.paramMap.subscribe(
+      params => {this.userID = params.get("id");}
+    );
+    let user = localStorage.getItem("userDetails");
+    if (user) {
+      this.user = JSON.parse(user);
+      let date = new Date(this.user.lastActive).toDateString();
+      this.user.lastActive = date;
+    }
+    console.log(this.user);
   }
 
-  channelMenu1() {
-    if (this.group1) {this.group1 = false;}
-    else {this.group1 = true;}
+  logout() {
+    localStorage.clear();
+    this.router.navigateByUrl("");
   }
 
-  channelMenu2() {
-    if (this.group2) {this.group2 = false;}
-    else {this.group2 = true;}
+  joinChannel(group: number, channel: number) {
+    localStorage.setItem("group", JSON.stringify(this.groups.find(x => x.id == group)));
+    localStorage.setItem("channels", JSON.stringify(this.channels.filter(x => x.groupID == group)));
+    let url = "channel/" + group + "/" + channel;
+    this.router.navigateByUrl(url);
   }
 
-  channelMenu5() {
-    if (this.group5) {this.group5 = false;}
-    else {this.group5 = true;}
-  }
-
-  channelMenu3() {
-    if (this.group3) {this.group3 = false;}
-    else {this.group3 = true;}
-  }
-
-  channelMenu4() {
-    if (this.group4) {this.group4 = false;}
-    else {this.group4 = true;}
-  }
-
-  groupDetailsModal() {
+  openModal(modalName: string, groupID: number = -1) {
     const modal = this.modalService.open(GroupDetailsComponent, {
       scrollable: true,
-      windowClass: 'myCustomModalClass',
       size: 'lg',
       centered: true
     });
 
-    let data = {
-      prop1: "Some Data",
-      prop2: "From Parent Component",
-      prop3: "This can be anything"
-    };
+    console.log(groupID);
+
+    let data = {};
+    if (groupID < 0) {
+      data = {modal: modalName};
+    }
+    else {
+      data = {
+       modal: modalName,
+       user: this.user,
+       group: this.groups.find(x => x.id == groupID),
+       channels: this.channels.filter(x => x.groupID == groupID)
+      }
+    }
+
+    console.log(data);
 
     modal.componentInstance.fromParent = data;
     modal.result.then((result) => {

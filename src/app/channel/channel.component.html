@@ -4,39 +4,25 @@
     <div class = "row m-0 h-100 border">
         <div class = "offcanvas-lg offcanvas-start col-2 p-0" id = "channel-listcol">
             <div class = "container position-relative m-auto vh-100">
-                <h3 id = "groupname" class = "mt-2 text-center">GROUPNAME</h3> 
-                <button id = "close-sidebar-btn" type = "button" class = "btn-close offset-1" data-bs-dismiss = "offcanvas" data-bs-target = "#channel-listcol"></button>
+                <h3 id = "groupname" class = "mt-2 text-center">{{ group.name }}</h3> 
+                <button id = "close-sidebar-btn" type = "button" class = "btn-close" data-bs-dismiss = "offcanvas" data-bs-target = "#channel-listcol"></button>
                 <hr class = "mt-1">
                 <div class = "list-wrapper overflow-auto d-inline-block w-100">
                     <ul class = "list-group text-center">
-                        <li class = "list-group-item">Channel 1</li>
-                        <li class = "list-group-item">Channel 1</li>
-                        <li class = "list-group-item">Channel 1</li>
-                        <li class = "list-group-item">Channel 1</li>
-                        <li class = "list-group-item">Channel 1</li>
-                        <li class = "list-group-item">Channel 1</li>
-                        <li class = "list-group-item">Channel C</li>
-                        <li class = "list-group-item">Channel B</li>
-                        <li class = "list-group-item">Channel A</li>
-                        <li class = "list-group-item">Channel A</li>
-                        <li class = "list-group-item">Channel A</li>
-                        <li class = "list-group-item">Channel A</li>
-                        <li class = "list-group-item">Channel A</li>
-                        <li class = "list-group-item">Channel A</li>
-                        <li class = "list-group-item">Channel A</li>
-                        <li class = "list-group-item">Channel A</li>
+                        <li *ngFor = "let channel of channels" class = "list-group-item" (click) = "switchChannel(channel.id)">{{ channel.name }}</li>
                     </ul>    
                 </div> 
                 
-                <div class = "position-absolute bottom-0 start-50 translate-middle-x mb-3">
-                    <button type = "button" class = "btn btn-primary text-nowrap">LEAVE CHAT</button>
+                <div class = "text-center justify-content-between">
+                    <button *ngIf = "user.role == 'Super Admin' || user.role == 'Group Admin'" type = "button" class = "btn btn-danger btn-sm text-nowrap me-1">Delete Channel</button>
+                    <button type = "button" class = "btn btn-primary btn-sm text-nowrap" (click) = "leave()">Leave Chat</button>
                 </div>
             </div> 
         </div> 
         <div class = "col-lg-8">
             <div class = "container position-relative vh-100">
                 <button id = "open-channel-sidebar" type = "button" class = "btn btn-outline-primary px-2 py-0 mb-2" data-bs-toggle = "offcanvas" data-bs-target = "#channel-listcol"><i class = "bi bi-list"></i></button>
-                <h3 id = "channelname" class = "mt-2">CHANNELNAME</h3>
+                <h3 id = "channelname" class = "mt-2">{{ channel.name }}</h3>
                 <button id = "open-member-sidebar" type = "button" class = "btn btn-outline-secondary px-2 py-0 mb-2 position-absolute end-0" data-bs-toggle = "offcanvas" data-bs-target = "#memberlistcol"><i class = "bi bi-people-fill"></i></button>    
                 <hr class = "mt-1">
                 <div class = "chat-wrapper overflow-auto d-inline-block w-100">
@@ -44,7 +30,7 @@
                     <tbody>
                         <tr>
                             <td class = "pfp px-0 align-top"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
-                            <td class = "ps-2 ">
+                            <td class = "ps-2">
                                 <h6 class = "d-inline-block mb-0">User</h6>
                                 <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>
                                 <p class = "mb-1 ">Hi everyone!<br>hihi<br>hihi</p>
@@ -56,7 +42,7 @@
                             </td> 
                         </tr>
                         <tr>
-                            <td class = "pfp px-0"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
+                            <td class = "pfp px-0 align-top"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
                             <td class = "ps-2">
                                 <h6 class = "d-inline-block mb-0">User</h6>
                                 <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>
@@ -64,7 +50,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class = "pfp px-0"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
+                            <td class = "pfp px-0 align-top"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
                             <td class = "ps-2">
                                 <h6 class = "d-inline-block mb-0">User</h6>
                                 <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>
@@ -72,7 +58,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class = "pfp px-0"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
+                            <td class = "pfp px-0 align-top"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
                             <td class = "ps-2">
                                 <h6 class = "d-inline-block mb-0">User</h6>
                                 <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>
@@ -80,7 +66,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class = "pfp px-0"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
+                            <td class = "pfp px-0 align-top"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
                             <td class = "ps-2">
                                 <h6 class = "d-inline-block mb-0">User</h6>
                                 <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>
@@ -88,7 +74,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class = "pfp px-0"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
+                            <td class = "pfp px-0 align-top"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
                             <td class = "ps-2">
                                 <h6 class = "d-inline-block mb-0">User</h6>
                                 <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>
@@ -96,7 +82,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class = "pfp px-0"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
+                            <td class = "pfp px-0 align-top"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
                             <td class = "ps-2">
                                 <h6 class = "d-inline-block mb-0">User</h6>
                                 <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>
@@ -104,7 +90,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class = "pfp px-0"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
+                            <td class = "pfp px-0 align-top"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
                             <td class = "ps-2">
                                 <h6 class = "d-inline-block mb-0">User</h6>
                                 <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>
@@ -112,7 +98,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class = "pfp px-0"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
+                            <td class = "pfp px-0 align-top"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
                             <td class = "ps-2">
                                 <h6 class = "d-inline-block mb-0">User</h6>
                                 <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>

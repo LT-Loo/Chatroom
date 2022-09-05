@@ -7,27 +7,27 @@
         <h1 class = "title">Welcome to<br>Chatroom</h1>
 
         <!-- Login Form -->
-        <form>
+        <div>
             <!-- Error message for invalid user -->
-            <!-- <div *ngIf = "!valid">
-                <p color = "red" class = "text-center">Incorrect email or password.</p>
-            </div> -->
+            <div *ngIf = "!valid">
+                <p class = "text-center text-danger">Incorrect username or password.</p>
+            </div>
 
             <!-- Email input -->
             <div class = "form-outline mb-4">
-                <input type = "email" id = "email" class = "form-control" placeholder = "Email" />
+                <input type = "username" id = "username" class = "form-control" placeholder = "Username" [(ngModel)] = "username">
             </div>
         
             <!-- Password input -->
             <div class = "form-outline mb-4">
-                <input type = "password" id = "pwd" class = "form-control" placeholder = "Password" />
+                <input type = "password" id = "pwd" class = "form-control" placeholder = "Password" [(ngModel)] = "password">
             </div>
         
             <!-- Submit button -->
             <div class = "d-grid gap-2 mx-auto">
-                <button type = "button" class = "btn" routerLink = "/account"><strong>LOGIN</strong></button>        
+                <button type = "button" class = "btn" (click) = "login()"><strong>LOGIN</strong></button>        
             </div>  
-        </form> 
+        </div> 
 
     </div>
 </div>

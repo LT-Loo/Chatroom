@@ -1,49 +1,36 @@
 <!-- Group Details Modal -->
 
 <div class = "modal-header py-2">
-    <h5 class = "modal-title">Group Name (XX)</h5>
-    <!-- <h5 class = "modal-title">Create New Channel</h5> -->
-    <!-- <h5 class = "modal-title">Create New Group</h5> -->
+    <h5 *ngIf = "modal == 'details';" class = "modal-title">{{ fromParent.group.name }} (XX)</h5>
+    <h5 *ngIf = "modal == 'newChannel';" class = "modal-title">Create New Channel</h5>
+    <h5 *ngIf = "modal == 'newGroup';" class = "modal-title">Create New Group</h5>
     <button type = "button" class = "btn-close" (click) = "closeModal('close')"></button>
 </div>
 
 <div class = "modal-body pt-2 pb-1">
-    <div class = "row">
-        <div class = "col">
-            <i class = "bi bi-person-badge pe-1"></i>Group Admin: XXX (You)<br>
-            <i class = "bi bi-person-badge-fill pe-1"></i>Group Assis: XXX
+    <div *ngIf = "modal == 'details';">
+        <div class = "row">
+            <div class = "col">
+                <i class = "bi bi-person-badge pe-1"></i>Group Admin: XXX<br>
+                <i class = "bi bi-person-badge-fill pe-1"></i>Group Assis: XXX
+            </div>
+            <div class = "col align-self-end text-end">
+                <button *ngIf = "fromParent.user.role == 'Super Admin' || fromParent.user.role == 'Group Admin'" type = "button" class = "btn btn-danger py-1" (click) = "closeModal('changes saved!')">Delete Group</button>
+            </div>
         </div>
-        <div class = "col align-self-end text-end">
-            <button type = "button" class = "btn btn-danger py-1" (click) = "closeModal('changes saved!')">Delete Group</button>
+        <hr class = "my-2 py-0">
+        <div class = "row">
+            <p class = "mb-2"><i class = "bi bi-chat-dots pe-1"></i>Online Members: XX</p>
         </div>
-    </div>
-    <hr class = "my-2 py-0">
-    <div class = "row">
-        <p class = "mb-2"><i class = "bi bi-chat-dots pe-1"></i>Online Members: XX</p>
-    </div>
-    <div class = "row row-cols-3 row-cols-lg-5 py-2 mb-0">
-        <div class = "col-lg text-center mb-3">
-            <span class = "roomname border border-secondary rounded-pill px-3 py-1 text-nowrap">Channel Name</span>
-        </div>
-        <div class = "col-lg text-center mb-3">
-            <span class = "roomname border border-secondary rounded-pill px-3 py-1 text-nowrap">Channel Name</span>
-        </div>
-        <div class = "col-lg text-centermb-3">
-            <span class = "roomname border border-secondary rounded-pill px-3 py-1 text-nowrap">Channel Name</span>
-        </div>
-        <div class = "col-lg text-center mb-3">
-            <span class = "roomname border border-secondary rounded-pill px-3 py-1 text-nowrap">Channel Name</span>
-        </div>
-        <div class = "col-lg text-center mb-3">
-            <span class = "roomname border border-secondary rounded-pill px-3 py-1 text-nowrap">Channel Name</span>
-        </div>
-        <div class = "col-lg text-center mb-3">
-            <span class = "roomname border border-secondary rounded-pill px-3 py-1 text-nowrap">Channel Name</span>
+        <div class = "row row-cols-3 row-cols-lg-5 py-2 mb-0">
+            <div *ngFor = "let channel of fromParent.channels" class = "col-lg text-center mb-3">
+                <p class = "roomname border border-secondary rounded-pill px-3 py-1 mb-0" (click) = "joinChannel(channel.id)">{{ channel.name }}</p>
+            </div>
         </div>
     </div>
 
 
-    <!-- <div class = "container mt-2">
+    <div *ngIf = "modal == 'newGroup';" class = "container mt-2">
         <div class = "row mb-2">
             <label class = "col-2 col-lg-1 col-form-label me-2">Name</label>
             <div class = "col-8">
@@ -68,41 +55,46 @@
                 </ul>
             </div>
         </div>
-    </div> -->
+    </div>
 
-    <!-- <div class = "row mb-2">
-        <label class = "col-2 col-lg-1 col-form-label me-2">Name</label>
-        <div class = "col-8">
-            <input type = "text" class = "form-control form-control-sm" placeholder = "Group Name">
-        </div> 
+    <div *ngIf = "modal == 'newChannel';">
+        <div class = "row mb-2">
+            <label class = "col-2 col-lg-1 col-form-label me-2">Name</label>
+            <div class = "col-8">
+                <input type = "text" class = "form-control form-control-sm" placeholder = "Group Name">
+            </div> 
+        </div>
+        <div class = "row mb-2">
+            <label class = "col-2 col-lg-1 form-label me-2">Channel</label>
+            <div class = "col-8">
+                <input type = "text" class = "form-control form-control-sm" placeholder = "Add a channel">
+            </div>
+            <div class = "col-1 p-0">
+                <button type = "button" class = "btn btn-outline-primary btn-sm">Add</button>
+            </div>
+        </div>
+        <div class = "row mb-2">
+            <div class = "col offset-2 offset-lg-1 p-0">
+                <ul>
+                    <li>Channel 1</li>
+                    <li>Channel 2</li>
+                    <li>Channel 3</li>
+                </ul>
+            </div>
+        </div>
     </div>
-    <div class = "row mb-2">
-        <label class = "col-2 col-lg-1 form-label me-2">Channel</label>
-        <div class = "col-8">
-            <input type = "text" class = "form-control form-control-sm" placeholder = "Add a channel">
-        </div>
-        <div class = "col-1 p-0">
-            <button type = "button" class = "btn btn-outline-primary btn-sm">Add</button>
-        </div>
-    </div>
-    <div class = "row mb-2">
-        <div class = "col offset-2 offset-lg-1 p-0">
-            <ul>
-                <li>Channel 1</li>
-                <li>Channel 2</li>
-                <li>Channel 3</li>
-            </ul>
-        </div>
-    </div> -->
 </div>
 
-<div class = "modal-footer py-2 justify-content-between">
+<div *ngIf = "modal == 'details';" class = "modal-footer py-2 justify-content-between">
     <!-- If Group Admin/Group Assis-->
-    <button type = "button" class = "btn btn-secondary py-1" (click) = "closeModal('changes saved!')">Create Channel</button>
+    <button *ngIf = "fromParent.user.role != 'User'" type = "button" class = "btn btn-secondary py-1" (click) = "createChannel()">Create Channel</button>
     <div>
-        <button type = "button" class = "btn btn-danger py-1" (click) = "closeModal('changes saved!')">Delete Channel</button>
+        <button *ngIf = "fromParent.user.role == 'Super Admin' || fromParent.user.role == 'Group Admin'" type = "button" class = "btn btn-danger py-1" (click) = "closeModal('changes saved!')">Delete Channel</button>
         <button type = "button" class = "btn btn-primary py-1 ms-2" (click) = "closeModal('changes saved!')">Join Channel</button>
-    </div>
-    <!-- <button type = "button" class = "btn btn-secondary py-1" (click) = "closeModal('changes saved!')">Back</button>
-    <button type = "button" class = "btn btn-primary py-1" (click) = "closeModal('changes saved!')">Create</button> -->
+    </div>    
+</div>
+
+<div *ngIf = "modal == 'newChannel' || modal == 'newGroup';" class = "modal-footer py-2 justify-content-between">
+    <button type = "button" class = "btn btn-secondary py-1" (click) = "back()">Back</button>
+    <button type = "button" class = "btn btn-primary py-1" (click) = "closeModal('changes saved!')">Create</button>
 </div>

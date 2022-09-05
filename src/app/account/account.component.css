@@ -10,10 +10,6 @@
     padding: 20px;
 }
 
-/* .col-lg, #group-row, #logout, #user, #user-pfp, #name, #pic, #user-data, #user-details, #group-table, #group-table td, #groups, .dropdown {
-    border: black solid 1px;
-} */
-
 .dropdown {
     position: relative;
     display: inline-block;
@@ -88,6 +84,11 @@ img {
 #user-pfp {
     height: 155px;
     width: 155px;
+}
+
+#user-details tr {
+    border-top: 0.5px solid grey;
+    border-bottom: 0.5px solid grey;
 }
 
 #user-details td{

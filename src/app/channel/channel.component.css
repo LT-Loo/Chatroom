@@ -10,8 +10,8 @@
 }
 
 .chat-pfp {
-    height: 55px;
-    width: 55px;
+    height: 50px;
+    width: 50px;
 }
 
 .msg-date {
@@ -38,7 +38,7 @@
     #close-sidebar-btn {
         display: inline-block;
         visibility: visible;
-        margin-left: 16px;
+        margin-left: 54px;
     }
 
     #close-member-btn {
@@ -63,7 +63,7 @@
 
     #channelname {
         display: inline-block;
-        padding-left: 7px;
+        padding-left: 10px;
         margin: auto;
     }
 
@@ -86,7 +86,7 @@
 }
 
 .table-borderless td {
-    padding-bottom: 7px;
+    padding-bottom: 15px;
 }
 
 .chat-wrapper, .list-wrapper, .member-wrapper {
