@@ -14,7 +14,7 @@ export class ChannelComponent implements OnInit {
   groupID: any = "";
   channelID: any = "";
   user: any = {};
-  channels: any = [];
+  channels: any[] = [];
   group: any = {};
   channel: any = {};
 
@@ -28,21 +28,25 @@ export class ChannelComponent implements OnInit {
 
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
-    this.user = localStorage.getItem("userDetails");
-    this.user = JSON.parse(this.user);
-    this.channels = localStorage.getItem("channels");
-    this.channels = JSON.parse(this.channels);
-    this.group = localStorage.getItem("group");
-    this.group = JSON.parse(this.group);
+    let usr = localStorage.getItem("userDetails");
+    let chns = localStorage.getItem("joinedChannels");
+    let grp = localStorage.getItem("joinedGroup");
+    if (usr && chns && grp) {
+      this.user = JSON.parse(usr);
+      this.channels = JSON.parse(chns);
+      this.group = JSON.parse(grp);
+    }
     this.channel = this.channels.find((x: any) => x.id == this.channelID);
-  }
-
-  joinChannel() {
-
+    console.log(this.user);
+    console.log(this.group);
+    console.log(this.channels);
+    console.log(this.channel);
   }
 
   leave() {
-    this.router.navigateByUrl("/account/" + this.user.id);
+    localStorage.removeItem("joinedGroup");
+    localStorage.removeItem("joinedChannels");
+    this.router.navigateByUrl("account/" + this.user.id);
   }
 
   switchChannel(channel: number) {

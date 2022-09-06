@@ -27,11 +27,13 @@ export class LoginComponent implements OnInit {
   // Verify user
   login() {
     this.httpClient.post(SERVER + "/login", {username: this.username, pwd: this.password}, httpOptions)
-     .subscribe((user: any) => {
-      console.log(user);
-      if (user.valid) { // If user valid
-        localStorage.setItem("userDetails", JSON.stringify(user));
-        this.router.navigateByUrl('/account/' + user.id);
+     .subscribe((data: any) => {
+      console.log(data);
+      if (data.user.valid) { // If user valid
+        localStorage.setItem("userDetails", JSON.stringify(data.user));
+        localStorage.setItem("Groups", JSON.stringify(data.groups));
+        localStorage.setItem("Channels", JSON.stringify(data.channels));
+        this.router.navigateByUrl('account/' + data.user.id);
       }
       else {
         this.valid = false;

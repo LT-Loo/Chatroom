@@ -5,7 +5,7 @@
         <div class = "offcanvas-lg offcanvas-start col-2 p-0" id = "channel-listcol">
             <div class = "container position-relative m-auto vh-100">
                 <h3 id = "groupname" class = "mt-2 text-center">{{ group.name }}</h3> 
-                <button id = "close-sidebar-btn" type = "button" class = "btn-close" data-bs-dismiss = "offcanvas" data-bs-target = "#channel-listcol"></button>
+                <button id = "close-sidebar-btn" type = "button" class = "btn-close position-absolute end-0" data-bs-dismiss = "offcanvas" data-bs-target = "#channel-listcol"></button>
                 <hr class = "mt-1">
                 <div class = "list-wrapper overflow-auto d-inline-block w-100">
                     <ul class = "list-group text-center">
@@ -13,9 +13,9 @@
                     </ul>    
                 </div> 
                 
-                <div class = "text-center justify-content-between">
-                    <button *ngIf = "user.role == 'Super Admin' || user.role == 'Group Admin'" type = "button" class = "btn btn-danger btn-sm text-nowrap me-1">Delete Channel</button>
-                    <button type = "button" class = "btn btn-primary btn-sm text-nowrap" (click) = "leave()">Leave Chat</button>
+                <div class = "text-center position-absolute bottom-0 mb-3">
+                    <button *ngIf = "user.role == 'Super Admin' || user.role == 'Group Admin'" type = "button" class = "btn btn-danger btn-sm text-nowrap me-3">Delete Channel</button>
+                    <button type = "button" class = "btn btn-primary btn-sm text-nowrap" (click) = "leave()">Leave</button>
                 </div>
             </div> 
         </div> 
@@ -123,12 +123,35 @@
             <button id = "close-member-btn" type = "button" class = "btn-close" data-bs-dismiss = "offcanvas" data-bs-target = "#memberlistcol"></button>
             <h3 id = "memberlist" class = "mt-2 text-center">MEMBERS</h3>
             <hr class = "mt-1">
-            <div class = "member-wrapper  overflow-auto d-inline-block w-100">
-                <ul class = "member-list ps-2">
-                    <li><i class = "bi bi-chat-dots-fill pe-2"></i>User ABC</li>
-                    <li><i class = "bi bi-moon pe-2"></i>User 123</li>
+            <div class = "member-wrapper overflowy-auto d-inline-block w-100">
+                <ul class = "member-list ps-0">
+                    <li class = "row align-items-center m-auto">
+                        <div class = "col">
+                            <i class = "bi bi-chat-dots-fill pe-2"></i>User ABC
+                        </div>
+                        <div *ngIf = "user.role != 'User';" class = "col-3 delete-btn">
+                            <button type = "button" class = "btn btn py-0 px-1"><i class = "bi bi-trash-fill"></i></button>
+                        </div>
+                    </li>
+                    <li class = "row align-items-center m-auto">
+                        <div class = "col">
+                            <i class = "bi bi-moon pe-2"></i>User 123
+                        </div>
+                        <div *ngIf = "user.role != 'User';" class = "col-3 delete-btn dropdown">
+                            <button type = "button" class = "btn py-0 px-1" data-bs-toggle = "dropdown"><i class = "bi bi-trash-fill"></i></button>
+                            <ul class = "dropdown-menu p-0 mt-0">
+                                <li *ngIf = "user.role == 'Super Admin' || user.role == 'Group Admin';" class = "dropdown-item py-0 text-danger">Delete from group</li>
+                                <li class = "dropdown-item py-0 text-danger disabled">Delete from channel</li>
+                                <li><hr class = "dropdown-divider my-0"></li>
+                                <li class = "dropdown-item py-0 text-danger">Delete from XXX</li>
+                                <li class = "dropdown-item py-0 text-danger">Delete from XXX</li>
+                                <li class = "dropdown-item py-0 text-danger">Delete from XXX</li>
+                            </ul>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>    
     </div> 
 </div>
+

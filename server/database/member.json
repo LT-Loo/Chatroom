@@ -1,0 +1,127 @@
+[
+    {
+        "userID": "efad5621-f56a-4fa6-ad6f-df1dd4fb97c9",
+        "groupID": 1,
+        "channelID": 1
+    },
+    {
+        "userID": "efad5621-f56a-4fa6-ad6f-df1dd4fb97c9",
+        "groupID": 1,
+        "channelID": 2
+    },
+    {
+        "userID": "efad5621-f56a-4fa6-ad6f-df1dd4fb97c9",
+        "groupID": 2,
+        "channelID": 3
+    },
+    {
+        "userID": "efad5621-f56a-4fa6-ad6f-df1dd4fb97c9",
+        "groupID": 2,
+        "channelID": 4
+    },
+    {
+        "userID": "efad5621-f56a-4fa6-ad6f-df1dd4fb97c9",
+        "groupID": 2,
+        "channelID": 5
+    },
+    {
+        "userID": "efad5621-f56a-4fa6-ad6f-df1dd4fb97c9",
+        "groupID": 3,
+        "channelID": 6
+    },
+    {
+        "userID": "efad5621-f56a-4fa6-ad6f-df1dd4fb97c9",
+        "groupID": 3,
+        "channelID": 7
+    },
+    {
+        "userID": "efad5621-f56a-4fa6-ad6f-df1dd4fb97c9",
+        "groupID": 3,
+        "channelID": 8
+    },
+    {
+        "userID": "efad5621-f56a-4fa6-ad6f-df1dd4fb97c9",
+        "groupID": 3,
+        "channelID": 9
+    },
+    {
+        "userID": "efad5621-f56a-4fa6-ad6f-df1dd4fb97c9",
+        "groupID": 4,
+        "channelID": 10
+    },
+    {
+        "userID": "efad5621-f56a-4fa6-ad6f-df1dd4fb97c9",
+        "groupID": 5,
+        "channelID": 11
+    },
+    {
+        "userID": "efad5621-f56a-4fa6-ad6f-df1dd4fb97c9",
+        "groupID": 6,
+        "channelID": 12
+    },
+    {
+        "userID": "efad5621-f56a-4fa6-ad6f-df1dd4fb97c9",
+        "groupID": 7,
+        "channelID": 13
+    },
+    {
+        "userID": "802d938f-6780-4190-9f39-36b63bc71f8d",
+        "groupID": 1,
+        "channelID": 1
+    },
+    {
+        "userID": "802d938f-6780-4190-9f39-36b63bc71f8d",
+        "groupID": 1,
+        "channelID": 2
+    },
+    {
+        "userID": "802d938f-6780-4190-9f39-36b63bc71f8d",
+        "groupID": 4,
+        "channelID": 10
+    },
+    {
+        "userID": "802d938f-6780-4190-9f39-36b63bc71f8d",
+        "groupID": 5,
+        "channelID": 11
+    },
+    {
+        "userID": "802d938f-6780-4190-9f39-36b63bc71f8d",
+        "groupID": 6,
+        "channelID": 12
+    },
+    {
+        "userID": "802d938f-6780-4190-9f39-36b63bc71f8d",
+        "groupID": 7,
+        "channelID": 13
+    },
+    {
+        "userID": "89854acc-7823-4659-b20d-804486581806",
+        "groupID": 2,
+        "channelID": 3
+    },
+    {
+        "userID": "89854acc-7823-4659-b20d-804486581806",
+        "groupID": 2,
+        "channelID": 4
+    },
+    {
+        "userID": "89854acc-7823-4659-b20d-804486581806",
+        "groupID": 2,
+        "channelID": 5
+    },
+    {
+        "userID": "e28ca68c-04e2-4682-bdbb-0cd165f4aebc",
+        "groupID": 3,
+        "channelID": 6
+    },
+    {
+        "userID": "e28ca68c-04e2-4682-bdbb-0cd165f4aebc",
+        "groupID": 3,
+        "channelID": 8
+    },
+    {
+        "userID": "e28ca68c-04e2-4682-bdbb-0cd165f4aebc",
+        "groupID": 3,
+        "channelID": 9
+    }
+]

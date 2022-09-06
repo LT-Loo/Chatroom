@@ -38,7 +38,8 @@
     #close-sidebar-btn {
         display: inline-block;
         visibility: visible;
-        margin-left: 54px;
+        margin-right: 10px;
+        margin-top: 11px;
     }
 
     #close-member-btn {
@@ -67,7 +68,7 @@
         margin: auto;
     }
 
-    #open-channel-sidebar, #open-member-sidebar {
+    #open-channel-sidebar {
         display: inline-block;
         visibility: visible;
     }
@@ -95,4 +96,12 @@
 
 ::-webkit-scrollbar {
     width: 0px;
+}
+
+.delete-btn {
+    display: none;
+}
+
+.member-list li:hover .delete-btn {
+    display: block;
 }

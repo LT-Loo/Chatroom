@@ -2,12 +2,23 @@
 
 const User = require('./classes/user.js');
 
-var userData = [
-    new User("Super Admin", "superAdmin@example.com", "Super Admin"),
-    new User("Group Admin", "groupAdmin@example.com", "Group Admin"),
-    new User("Group Assis", "groupAssis@example.com", "Group Assis"),
-    new User("John Smith", "john@example.com")
-]
+// Read data from JSON file
+const fs = require("fs");
+const userFile = "./database/user.json";
+const userData = require(userFile);
+console.log(userData);
+
+const groupFile = "./database/group.json";
+const groupData = require(groupFile);
+console.log(groupData);
+
+const channelFile = "./database/channel.json";
+const channelData = require(channelFile);
+console.log(channelData);
+
+const memberFile = "./database/member.json";
+const memberData = require(memberFile);
+console.log(memberData);
 
 module.exports = function(req, res) {
 
@@ -18,15 +29,27 @@ module.exports = function(req, res) {
     let userRes = {};
     console.log("Verifying user...");
     for (let user of userData) {
+        
         // If user valid, build response data
         if (req.body.username == user.username) {
-            userRes = user;
-            userRes.valid = true;
+            userRes.user = user;
+            userRes.user.valid = true;
+            userRes.member = memberData.filter(x => x.userID == user.id);
+            userRes.groups = [];
+            userRes.channels = [];
+            for (let mbr of userRes.member) {
+                userRes.channels.push(channelData.find(x => x.id == mbr.channelID));
+                let group = groupData.find(x => x.id == mbr.groupID);
+                if (!userRes.groups.includes(group)) {
+                    userRes.groups.push(group);
+                }
+            }
+            console.log(userRes);
             break;
         }
     }
 
-    if (userRes.valid) {console.log("Login success!");}
+    if (userRes.user.valid) {console.log("Login success!");}
     else {console.log("Login failed. Username not found.");}
 
     res.send(userRes);
