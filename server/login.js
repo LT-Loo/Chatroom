@@ -34,15 +34,34 @@ module.exports = function(req, res) {
         if (req.body.username == user.username) {
             userRes.user = user;
             userRes.user.valid = true;
-            userRes.member = memberData.filter(x => x.userID == user.id);
+            userRes.members = memberData.filter(x => x.userID == user.id);
             userRes.groups = [];
             userRes.channels = [];
-            for (let mbr of userRes.member) {
+            for (let mbr of userRes.members) {
                 userRes.channels.push(channelData.find(x => x.id == mbr.channelID));
                 let group = groupData.find(x => x.id == mbr.groupID);
                 if (!userRes.groups.includes(group)) {
                     userRes.groups.push(group);
                 }
+            }
+            if (userRes.user.role == "Super Admin") {
+                userRes.members = memberData;
+                userRes.groups = groupData;
+                userRes.channels = channelData;
+                userRes.users = userData;
+            }
+            if (userRes.user.role == "Group Admin" || userRes.user.role == "Group Assis") {
+                userRes.members = memberData;
+                userRes.users = userData;
+            }
+            userRes.members = [];
+            for (let chn of userRes.channels) {
+                let chnMbr = {
+                    group: chn.groupID,
+                    channel: chn.id,
+                    members: memberData.filter(x => x.channelID == chn.id),
+                }
+                userRes.members.push(chnMbr);
             }
             console.log(userRes);
             break;

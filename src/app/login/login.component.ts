@@ -33,6 +33,8 @@ export class LoginComponent implements OnInit {
         localStorage.setItem("userDetails", JSON.stringify(data.user));
         localStorage.setItem("Groups", JSON.stringify(data.groups));
         localStorage.setItem("Channels", JSON.stringify(data.channels));
+        localStorage.setItem("Members", JSON.stringify(data.members));
+        localStorage.setItem("Users", JSON.stringify(data.users));
         this.router.navigateByUrl('account/' + data.user.id);
       }
       else {

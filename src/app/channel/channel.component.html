@@ -125,17 +125,9 @@
             <hr class = "mt-1">
             <div class = "member-wrapper overflowy-auto d-inline-block w-100">
                 <ul class = "member-list ps-0">
-                    <li class = "row align-items-center m-auto">
+                    <li *ngFor = "let member of members.members" class = "row align-items-center m-auto">
                         <div class = "col">
-                            <i class = "bi bi-chat-dots-fill pe-2"></i>User ABC
-                        </div>
-                        <div *ngIf = "user.role != 'User';" class = "col-3 delete-btn">
-                            <button type = "button" class = "btn btn py-0 px-1"><i class = "bi bi-trash-fill"></i></button>
-                        </div>
-                    </li>
-                    <li class = "row align-items-center m-auto">
-                        <div class = "col">
-                            <i class = "bi bi-moon pe-2"></i>User 123
+                            <i class = "bi bi-chat-dots-fill pe-2"></i>{{ member.username }}
                         </div>
                         <div *ngIf = "user.role != 'User';" class = "col-3 delete-btn dropdown">
                             <button type = "button" class = "btn py-0 px-1" data-bs-toggle = "dropdown"><i class = "bi bi-trash-fill"></i></button>
@@ -143,7 +135,7 @@
                                 <li *ngIf = "user.role == 'Super Admin' || user.role == 'Group Admin';" class = "dropdown-item py-0 text-danger">Delete from group</li>
                                 <li class = "dropdown-item py-0 text-danger disabled">Delete from channel</li>
                                 <li><hr class = "dropdown-divider my-0"></li>
-                                <li class = "dropdown-item py-0 text-danger">Delete from XXX</li>
+                                <li *ngFor = "let channel of channels" class = "dropdown-item py-0 text-danger">Delete from {{ channel.name }}</li>
                                 <li class = "dropdown-item py-0 text-danger">Delete from XXX</li>
                                 <li class = "dropdown-item py-0 text-danger">Delete from XXX</li>
                             </ul>

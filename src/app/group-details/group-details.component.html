@@ -5,7 +5,7 @@
     <h5 *ngIf = "modal == 'newChannel';" class = "modal-title">Create New Channel</h5>
     <h5 *ngIf = "modal == 'newGroup';" class = "modal-title">Create New Group</h5>
     <h5 *ngIf = "modal == 'admin';" class = "modal-title">Admin Tab</h5>
-    <h5 *ngIf = "modal == 'addMember';" class = "modal-title">Add Member</h5>
+    <h5 *ngIf = "modal == 'addMember';" class = "modal-title">Add Member to {{ selectName.name }}</h5>
     <button type = "button" class = "btn-close" (click) = "closeModal('close')"></button>
 </div>
 
@@ -17,7 +17,7 @@
                 <i class = "bi bi-person-badge-fill pe-1"></i>Group Assis: XXX
             </div>
             <div class = "col align-self-end text-end">
-                <button *ngIf = "fromParent.user.role == 'Super Admin' || fromParent.user.role == 'Group Admin'" type = "button" class = "btn btn-danger py-1" (click) = "closeModal('changes saved!')">Delete Group</button>
+                <button *ngIf = "fromParent.user.role == 'Super Admin' || fromParent.user.role == 'Group Admin'" type = "button" class = "btn btn-danger py-1" (click) = "deleteItem('Group')">Delete Group</button>
             </div>
         </div>
         <hr class = "my-2 py-0">
@@ -40,21 +40,15 @@
     <div *ngIf = "modal == 'addMember';" class = "container mt-2">
         <div class = "row mb-3">
             <label class = "col-2 col-lg-1 col-form-label">Name</label>
-            <div class = "col">
-                <input type = "text" class = "form-control" placeholder = "Username">
-            </div>
-        </div>
-        <div class = "row mb-3">
-            <label class = "col-2 col-lg-1 col-form-label">Channel</label>
             <div class = "col-8">
-                <input type = "text" class = "form-control" placeholder = "Add to channel">
+                <input type = "text" class = "form-control" placeholder = "Add a User" [(ngModel)] = "addToChannel.member">
+                <p *ngIf = "addToChannel.invalidMember" class = "fs-6 fw-light text-danger mb-0 pb-0">* Invalid user.</p>
                 <ul class = "ps-3 mt-2">
-                    <li>Channel 1</li>
-                    <li>Channel 2</li>
+                    <li *ngFor = "let member of addToChannel.memberList">{{ member }}</li>
                 </ul>
             </div>
             <div class = "col-1">
-                <button type = "button" class = "btn btn-outline-primary">Add</button>
+                <button type = "button" class = "btn btn-outline-primary" (click) = "addMemberToChannel()">Add</button>
             </div>
         </div>
     </div>
@@ -63,24 +57,24 @@
         <div class = "row mb-3">
             <label class = "col-2 col-lg-1 col-form-label me-2">Name</label>
             <div class = "col-8">
-                <input type = "text" class = "form-control" placeholder = "Channel Name">
+                <input type = "text" class = "form-control" placeholder = "Channel Name" [(ngModel)] = "newChannel.name">
+                <p *ngIf = "newChannel.invalidChannel" class = "fs-6 fw-light text-danger mb-0 pb-0">* Channel already exists.</p>
             </div> 
         </div>
         <div class = "row mb-3">
             <label class = "col-2 col-lg-1 col-form-label me-2">Member</label>
             <div class = "col-8">
-                <input type = "text" class = "form-control" placeholder = "Add a member">
+                <input type = "text" class = "form-control" placeholder = "Add a member" [(ngModel)] = "newChannel.member">
+                <p *ngIf = "newChannel.invalidMember" class = "fs-6 fw-light text-danger mb-0 pb-0">* Invalid user.</p>
             </div>
             <div class = "col-1 p-0">
-                <button type = "button" class = "btn btn-outline-primary">Add</button>
+                <button type = "button" class = "btn btn-outline-primary" (click) = "newChannelAddMember()">Add</button>
             </div>
         </div>
         <div class = "row mb-3">
             <div class = "col offset-2 offset-lg-1 ps-2">
                 <ul>
-                    <li>User 1</li>
-                    <li>User 2</li>
-                    <li>User 3</li>
+                    <li *ngFor = "let member of newChannel.memberList">{{ member }}</li>
                 </ul>
             </div>
         </div>
@@ -90,24 +84,24 @@
         <div class = "row mb-3">
             <label class = "col-2 col-lg-1 col-form-label me-2">Name</label>
             <div class = "col-8">
-                <input type = "text" class = "form-control" placeholder = "Group Name">
+                <input type = "text" class = "form-control" placeholder = "Group Name" [(ngModel)] = "newGroup.name">
+                <p *ngIf = "newGroup.invalidGroup" class = "fs-6 fw-light text-danger mb-0 pb-0">* Group already exists.</p>
             </div> 
         </div>
         <div class = "row mb-3">
             <label class = "col-2 col-lg-1 col-form-label me-2">Channel</label>
             <div class = "col-8">
-                <input type = "text" class = "form-control" placeholder = "Add a channel">
+                <input type = "text" class = "form-control" placeholder = "Add a channel" [(ngModel)] = "newGroup.channel">
+                <p *ngIf = "newGroup.invalidChannel" class = "fs-6 fw-light text-danger mb-0 pb-0">* Channel already exists.</p>
             </div>
             <div class = "col-1 p-0">
-                <button type = "button" class = "btn btn-outline-primary">Add</button>
+                <button type = "button" class = "btn btn-outline-primary" (click) = "newGroupAddChannel()">Add</button>
             </div>
         </div>
         <div class = "row mb-3">
             <div class = "col offset-2 offset-lg-1 ps-2">
                 <ul>
-                    <li>Channel 1</li>
-                    <li>Channel 2</li>
-                    <li>Channel 3</li>
+                    <li *ngFor = "let channel of newGroup.channelList">{{ channel }}</li>
                 </ul>
             </div>
         </div>
@@ -127,6 +121,13 @@
                             <label class = "col-2 col-lg-1 col-form-label me-2">Name</label>
                             <div class = "col">
                                 <input class = "form-control" placeholder = "Username"> 
+                                <p *ngIf = "!groupValid" class = "fs-6 fw-light text-danger mb-0 pb-0">* User already exists.</p>
+                            </div>
+                        </div>
+                        <div class = "row mb-3">
+                            <label class = "col-2 col-lg-1 col-form-label me-2">Email</label>
+                            <div class = "col">
+                                <input class = "form-control" placeholder = "Email"> 
                                 <p *ngIf = "!groupValid" class = "fs-6 fw-light text-danger mb-0 pb-0">* User already exists.</p>
                             </div>
                         </div>
@@ -263,13 +264,13 @@
     <!-- If Group Admin/Group Assis-->
     <button *ngIf = "fromParent.user.role != 'User'" type = "button" class = "btn btn-secondary py-1" (click) = "createChannel()">Create Channel</button>
     <div>
-        <button *ngIf = "fromParent.user.role == 'Super Admin' || fromParent.user.role == 'Group Admin'" type = "button" class = "btn btn-danger py-1" (click) = "closeModal('changes saved!')">Delete Channel</button>
+        <button *ngIf = "fromParent.user.role == 'Super Admin' || fromParent.user.role == 'Group Admin'" type = "button" class = "btn btn-danger py-1" (click) = "deleteItem('Channel')">Delete Channel</button>
         <button type = "button" class = "btn btn-primary py-1 ms-2" (click) = "joinChannel()">Join Channel</button>
     </div>    
 </div>
 
 <div *ngIf = "modal == 'newChannel' || modal == 'newGroup' || modal == 'addMember';" class = "modal-footer py-2 justify-content-between">
     <button type = "button" class = "btn btn-secondary py-1" (click) = "back()">Back</button>
-    <button *ngIf = "modal == 'newChannel' || modal == 'newGroup';" type = "button" class = "btn btn-primary py-1" (click) = "closeModal('changes saved!')">Create</button>
-    <button *ngIf = "modal == 'addMember';" type = "button" class = "btn btn-primary py-1">Add to Group</button>
+    <button *ngIf = "modal == 'newChannel' || modal == 'newGroup';" type = "button" class = "btn btn-primary py-1" (click) = "createItem()">Create</button>
+    <button *ngIf = "modal == 'addMember';" type = "button" class = "btn btn-primary py-1" (click) = "createItem()">Add to Channel</button>
 </div>

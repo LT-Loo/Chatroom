@@ -15,10 +15,13 @@ export class ChannelComponent implements OnInit {
   channelID: any = "";
   user: any = {};
   channels: any[] = [];
-  group: any = {};
+  groups: any = {};
   channel: any = {};
+  members: any = {};
+  group: any = {};
 
   ngOnInit(): void {
+
     this.route.paramMap.subscribe(
       params => {
         this.groupID = params.get("group");
@@ -29,23 +32,28 @@ export class ChannelComponent implements OnInit {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
     let usr = localStorage.getItem("userDetails");
-    let chns = localStorage.getItem("joinedChannels");
-    let grp = localStorage.getItem("joinedGroup");
-    if (usr && chns && grp) {
+    let chns = localStorage.getItem("Channels");
+    let grp = localStorage.getItem("Groups");
+    let mbrs = localStorage.getItem("Members");
+    if (usr && chns && grp && mbrs) {
       this.user = JSON.parse(usr);
       this.channels = JSON.parse(chns);
-      this.group = JSON.parse(grp);
+      this.groups = JSON.parse(grp);
+      this.members = JSON.parse(mbrs);
+      console.log("bfor:", this.members);
     }
     this.channel = this.channels.find((x: any) => x.id == this.channelID);
-    console.log(this.user);
-    console.log(this.group);
-    console.log(this.channels);
-    console.log(this.channel);
+    this.members = this.members.find((x: any) => x.channel == this.channelID && x.group == this.groupID);
+    this.channels = this.channels.filter(x => x.groupID == this.groupID);
+    this.group = this.groups.find((x: any) => x.id == this.groupID);
+    console.log("usr:", this.user);
+    console.log("grp:",this.group);
+    console.log("chns:", this.channels);
+    console.log("chn:", this.channel);
+    console.log("mbr:", this.members);
   }
 
   leave() {
-    localStorage.removeItem("joinedGroup");
-    localStorage.removeItem("joinedChannels");
     this.router.navigateByUrl("account/" + this.user.id);
   }
 
