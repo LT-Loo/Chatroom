@@ -3,6 +3,8 @@
 ## Introduction
 This is a chat system built with the implementation of Angular framework as the frontend, NodeJS as the server (backend) and Bootstrap framework for the interface design. This chat system allows users to communicate with each other in real-time within different groups and channels. Users are assigned with different permission roles when accessing the application.
 
+Github link: https://github.com/LT-Loo/3813ICT-Assignment
+
 ## Git
 ### Git Layout
 The git repository contains the source code of the project and a documentation written as a README file. The src folder contains all resources of the Angular frontend system while the server folder contains the source code for the NodeJS server system. All codes are modified and commited on the master (default) branch.
