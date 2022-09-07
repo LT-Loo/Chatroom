@@ -62,9 +62,6 @@ export class AccountComponent implements OnInit {
   }
 
   joinChannel(group: number, channel: number) {
-    // localStorage.setItem("joinedGroup", JSON.stringify(this.groups.find(x => x.id == group)));
-    // localStorage.setItem("joinedChannels", JSON.stringify(this.channels.filter(x => x.groupID == group)));
-    // localStorage.setItem("channelMembers", JSON.stringify(this.members.filter(x => x.channel == channel && x.group == group)));
     let url = "channel/" + group + "/" + channel;
     this.router.navigateByUrl(url);
   }
@@ -94,8 +91,6 @@ export class AccountComponent implements OnInit {
        members: this.members
       }
     }
-
-    console.log(data);
 
     modal.componentInstance.fromParent = data;
     modal.result.then((result) => {

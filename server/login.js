@@ -1,7 +1,5 @@
 // User verification from login request
 
-const User = require('./classes/user.js');
-
 // Read data from JSON file
 const fs = require("fs");
 const userFile = "./database/user.json";
