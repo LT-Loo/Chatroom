@@ -89,7 +89,6 @@ The table below provides description of the each feature shown in the modal and 
 
 
 ## Author
----------------
 Ler Theng Loo (s5212872)    
 3813ICT Software Frameworks    
 Griffith Univeristy    
