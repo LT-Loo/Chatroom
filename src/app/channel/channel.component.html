@@ -14,7 +14,7 @@
                 </div> 
                 
                 <div class = "text-center position-absolute bottom-0 mb-3">
-                    <button *ngIf = "user.role == 'Super Admin' || user.role == 'Group Admin'" type = "button" class = "btn btn-danger btn-sm text-nowrap me-3">Delete Channel</button>
+                    <button *ngIf = "user.role == 'Super Admin' || user.role == 'Group Admin'" type = "button" class = "btn btn-danger btn-sm text-nowrap me-3" (click) = "deleteChannel()">Delete Channel</button>
                     <button type = "button" class = "btn btn-primary btn-sm text-nowrap" (click) = "leave()">Leave</button>
                 </div>
             </div> 
@@ -129,15 +129,15 @@
                         <div class = "col">
                             <i class = "bi bi-chat-dots-fill pe-2"></i>{{ member.username }}
                         </div>
-                        <div *ngIf = "user.role != 'User';" class = "col-3 delete-btn dropdown">
+                        <div *ngIf = "(user.role == 'Group Assis' && member.role == 'User') ||
+                                      (user.role == 'Group Admin' && (member.role != 'Super Admin' && member.role != 'Group Admin')) ||
+                                      (user.role == 'Super Admin')" class = "col-3 delete-btn dropdown">
                             <button type = "button" class = "btn py-0 px-1" data-bs-toggle = "dropdown"><i class = "bi bi-trash-fill"></i></button>
                             <ul class = "dropdown-menu p-0 mt-0">
-                                <li *ngIf = "user.role == 'Super Admin' || user.role == 'Group Admin';" class = "dropdown-item py-0 text-danger">Delete from group</li>
+                                <li *ngIf = "user.role == 'Super Admin' || user.role == 'Group Admin';" class = "dropdown-item py-0 text-danger" (click) = "delete('Group', member.userID)">Delete from group</li>
                                 <li class = "dropdown-item py-0 text-danger disabled">Delete from channel</li>
                                 <li><hr class = "dropdown-divider my-0"></li>
-                                <li *ngFor = "let channel of channels" class = "dropdown-item py-0 text-danger">Delete from {{ channel.name }}</li>
-                                <li class = "dropdown-item py-0 text-danger">Delete from XXX</li>
-                                <li class = "dropdown-item py-0 text-danger">Delete from XXX</li>
+                                <li *ngFor = "let channel of channels" class = "dropdown-item py-0 text-danger" (click) = "delete('Channel', member.userID)">Delete from {{ channel.name }}</li>
                             </ul>
                         </div>
                     </li>

@@ -46,7 +46,19 @@ export class GroupDetailsComponent implements OnInit {
     invalidMember: false
   }
 
+  newUser: any = {
+    username: "",
+    email: "",
+    role: "User",
+    validUser: true,
+    empty: false
+  }
 
+  chgRole: any = {
+    username: "",
+    role: "User",
+    validUser: true
+  }
 
   constructor(public activeModal: NgbActiveModal,
     private router: Router) { }
@@ -81,15 +93,66 @@ export class GroupDetailsComponent implements OnInit {
   }
 
   joinChannel() {
-    // localStorage.setItem("group", JSON.stringify(this.fromParent.group));
-    // localStorage.setItem("channels", JSON.stringify(this.fromParent.channels));
+    if (this.select < 1) {this.select = this.channels[0].id;}
     let url = "channel/" + this.group.id + "/" + this.select;
     this.activeModal.close();
     this.router.navigateByUrl(url);
   }
 
-  addToGroup() {
-    // If group exist, show channel form, otherwise show error message
+  createUser() {
+    let usrList: any = localStorage.getItem("Users");
+    usrList = JSON.parse(usrList);
+
+    if (this.newUser.username == "" || this.newUser.email == "") {
+      this.newUser.empty = true;
+      this.newUser.validUser = true;
+      return;
+    }
+
+    if (usrList.map((x: any) => x.username).includes(this.newUser.username)) {
+      this.newUser.validUser = false;
+      this.newUser.username = "";
+    } else {
+      let user = {
+        id: uuid4(),
+        username: this.newUser.username,
+        email: this.newUser.email,
+        role: this.newUser.role,
+        lastActive: new Date().toUTCString()
+      }
+      console.log(user);
+      usrList.push(user);
+      localStorage.setItem("Users", JSON.stringify(usrList));
+      
+      this.newUser.username = "";
+      this.newUser.email = "";
+      this.newUser.role = "";  
+      this.newUser.validUser = true;
+    }
+    this.newUser.empty = false; 
+  }
+
+  chgUserRole() {
+    let usrList: any = localStorage.getItem("Users");
+    usrList = JSON.parse(usrList);
+
+    if (!usrList.map((x: any) => x.username).includes(this.chgRole.username) || this.user.username == this.chgRole.username) {
+      this.chgRole.validUser = false;
+      this.chgRole.username = "";
+      return
+    } else {
+      this.chgRole.validUser = true;
+      if (this.chgRole.username) {
+        let index = usrList.findIndex((x: any) => {
+          return x.username == this.chgRole.username;
+        });
+        usrList[index].role = this.chgRole.role;
+        localStorage.setItem("Users", JSON.stringify(usrList));
+
+        this.chgRole.username = "";
+        this.activeModal.close();
+      }
+    }
   }
 
   newGroupAddChannel() {
@@ -101,27 +164,42 @@ export class GroupDetailsComponent implements OnInit {
     else {this.newGroup.invalidChannel = true;}
   }
 
-  getUserList() {
-    let userList: any = localStorage.getItem("Users");
-    userList = JSON.parse(userList); 
-
-    let rmList: any = this.members.filter((x: any) => x.channel == this.select && x.group == this.group.id);
-
-    for (let chn of rmList) {
-      for (let usr of chn.members) {
-        userList = userList.filter((x: any) => x.username != usr.username);
+  getUserList(type: string = "") {
+    let userList: any = [];
+    let list: any = [];
+    if (this.user.role == "Group Assis") {
+      if (type == "newChannel") {
+        list = this.members.filter((x: any) => x.group == this.group.id);
+      } else {
+        list = this.members.filter((x: any) => x.group == this.group.id && x.channel != this.select);
+      }
+      for (let ls of list) {
+        for (let mbr of ls.members) {
+          if (!userList.find((x: any) => mbr.username == x.username)) {userList.push(mbr)};
+        }
+      }
+    } else {
+      userList = localStorage.getItem("Users");
+      userList = JSON.parse(userList); 
+      if (type != "newChannel") {
+        let rmList = this.members.filter((x: any) => x.group == this.group.id && x.channel == this.select);
+        for (let rm of rmList) {
+          for (let mbr of rm.members) {
+            userList = userList.filter((x: any) => x.username != mbr.username);
+          }
+        }
       }
     }
 
     userList = userList.map((x: any) => x.username);
 
-    console.log(userList);
+    console.log("userList", userList);
 
     return userList;
   }
 
   newChannelAddMember() {
-    let userList = this.getUserList();
+    let userList = this.getUserList("newChannel");
     
     if (!this.newChannel.memberList.includes(this.newChannel.member)
         && userList.includes(this.newChannel.member)) {
@@ -144,7 +222,7 @@ export class GroupDetailsComponent implements OnInit {
     console.log(this.addToChannel.memberList);
   }
 
-  createItem() {
+  createItem(modal: string = "") {
     let saveChange = true;
     let close = true;
     let grpList: any = localStorage.getItem("Groups");
@@ -156,11 +234,13 @@ export class GroupDetailsComponent implements OnInit {
     let usrList: any = localStorage.getItem("Users");
     usrList = JSON.parse(usrList);
 
-    if (this.modal == "newGroup") {
-      if (grpList.includes(this.newGroup.name)) {
+    if (modal == "") {modal = this.modal;}
+
+    if (modal == "newGroup") {
+      if (grpList.map((x: any) => x.name).includes(this.newGroup.name)) {
         this.newGroup.invalidGroup = true;
         this.newGroup.name = "";
-        saveChange = false;
+        return;
       } else {
         saveChange = true;
         this.newGroup.invalidGroup = true;
@@ -188,12 +268,12 @@ export class GroupDetailsComponent implements OnInit {
         }
       }
     }
-    if (this.modal == "newChannel") {
+    if (modal == "newChannel") {
       console.log((chnList.map((x: any) => x.name)));
       if ((chnList.map((x: any) => x.name)).includes(this.newChannel.name)) {
         this.newChannel.invalidChannel = true;
         this.newChannel.name = "";
-        saveChange = false;
+        return;
       } else {
         this.newChannel.invalidChannel = false;
         saveChange = true;
@@ -208,14 +288,15 @@ export class GroupDetailsComponent implements OnInit {
           group: this.group.id,
           members: []
         }
+        chnMbr.members.push(usrList.find((x: any) => x.username == this.user.username || x.role == "Super Admin"));
         for (let mbr of this.newChannel.memberList) {
-          chnMbr.members.push(usrList.find((x: any) => x.username == mbr));
+          chnMbr.members.push(usrList.find((x: any) => x.username == mbr && x.username != this.user.username));
         }
         chnList.push(chn);
         mbrList.push(chnMbr);
       }
     }
-    if (this.modal == "addMember") {
+    if (modal == "addMember") {
       if (this.addToChannel.memberList) {
         let index = mbrList.findIndex((x: any) => {
           return x.group == this.group.id && x.channel == this.select;
@@ -231,7 +312,7 @@ export class GroupDetailsComponent implements OnInit {
       localStorage.setItem("Groups", JSON.stringify(grpList));
       localStorage.setItem("Channels", JSON.stringify(chnList));
       localStorage.setItem("Members", JSON.stringify(mbrList));
-    }
+    } 
 
     if (close) {this.activeModal.close()}
     else {this.back();}
@@ -257,12 +338,10 @@ export class GroupDetailsComponent implements OnInit {
       this.channels = chnList;
     }
 
-    
     localStorage.setItem("Groups", JSON.stringify(grpList));
     localStorage.setItem("Channels", JSON.stringify(chnList));
     localStorage.setItem("Members", JSON.stringify(mbrList));
     this.activeModal.close();
-
   }
 
 }

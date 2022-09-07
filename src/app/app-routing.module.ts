@@ -8,7 +8,8 @@ import { ChannelComponent } from './channel/channel.component';
 const routes: Routes = [
   {path: '', component: LoginComponent},
   {path: 'account/:id', component: AccountComponent},
-  {path: 'channel/:group/:channel', component: ChannelComponent}
+  {path: 'channel/:group/:channel', component: ChannelComponent},
+  {path: '**', component: LoginComponent}
 ];
 
 @NgModule({

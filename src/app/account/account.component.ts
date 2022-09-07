@@ -22,9 +22,15 @@ export class AccountComponent implements OnInit {
   members: any[] = [];
 
   ngOnInit(): void {
-    
+
+    if (localStorage.length == 0) {
+      this.router.navigateByUrl("");
+    }
+
     this.route.paramMap.subscribe(
-      params => {this.userID = params.get("id");}
+      params => {
+        this.userID = params.get("id");
+      }
     );
 
     this.getData();
