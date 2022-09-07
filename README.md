@@ -1,11 +1,9 @@
 # Chatroom
 
 ## Introduction
----------------
 This is a chat system built with the implementation of Angular framework as the frontend, NodeJS as the server (backend) and Bootstrap framework for the interface design. This chat system allows users to communicate with each other in real-time within different groups and channels. Users are assigned with different permission roles when accessing the application.
 
 ## Git
----------------
 ### Git Layout
 The git repository contains the source code of the project and a documentation written as a README file. The src folder contains all resources of the Angular frontend system while the server folder contains the source code for the NodeJS server system. All codes are modified and commited on the master (default) branch.
 
@@ -15,7 +13,6 @@ Whenever a feature or section of work is completed, codes are staged and commite
 Since this is an individual project, I didn't find it necessary to create branches as merge conflict is unlikely to happen during the development.
 
 ## Data Structure
----------------
 There are four main data structures designed for this application. They are User, Group, Channel and Member.
 
 The User object stores the information of an user. It contains an ID, username, email, role and a date when the user is last active on the site. User objects are stored in an array.
@@ -34,7 +31,6 @@ The diagram attached below shows the relationship between the entities.
 All data structures are stored on the server side in separate JSON files. These files are loaded on the server when the server program starts running. Data is collected as required and sent as a response to the frontend.
 
 ## REST API
----------------
 ### Auth Login
 |  	|                                                         	|
 |:----------------:	|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
@@ -45,9 +41,7 @@ All data structures are stored on the server side in separate JSON files. These 
 | **Return Value** 	| If user valid:  `{user: User details, groups: Array of groups the user is in, channels: Array of channels the user is in, members: Array of combined data of the group and channel the user is a member of}` 	|
 
 ## Angular Architecture
----------------
-### Components
----------------
+## Components
 ### Login
 This is the default route for the program. It consists of a login form with input fields for username and password, and a login button. When the login button is clicked, the program calls the login() function, which sends a HTTP POST request to "/login" route with the username in the server (Note that password authentication is not implemented at the moment). The server will check if the username received actually exists in the dummy data loaded from the JSON files. If the user is valid, the component will receive a response with user data which is then stored in the Local Storage. The application will then navigate the user to the Account route.
 
@@ -80,8 +74,7 @@ The component consists of three sections. A channel panel to list out the channe
 |  Send Message  	| Non-functionable                                                                                                                                                                                                                                        	|                                                                ALL                                                                	|
 
   
-### Modal
----------------
+## Modal
 A modal is implemented as a popup dialog that allows several features such as creating a new user, adding a member to a channel etc. The modal is triggered by interacting with the buttons rendered in the Account page.
 
 The table below provides description of the each feature shown in the modal and their respective functionalities.
