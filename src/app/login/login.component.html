@@ -8,9 +8,13 @@
 
         <!-- Login Form -->
         <div>
-            <!-- Error message for invalid user -->
+            <!-- Error messages -->
             <div *ngIf = "!valid">
                 <p class = "text-center text-danger">Incorrect username or password.</p>
+            </div>
+
+            <div *ngIf = "error">
+                <p class = "text-center text-danger">Username and password are required.</p>
             </div>
 
             <!-- Email input -->

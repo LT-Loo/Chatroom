@@ -3,7 +3,7 @@
 <div class = "screen">
     <div class = "container min-vh-100">
         <div class = "row" id = "user">
-            <div class = "col-10" id = "username"><h1>{{ user.username }}</h1></div>
+            <div class = "col-10 text-capitalize" id = "username"><h1>{{ user.username }}</h1></div>
             <div class = "col-2" id = "logout">
                 <button type = "button" class = "logout btn" (click) = "logout()"><strong>LOGOUT</strong></button>        
             </div>
@@ -15,11 +15,11 @@
             </div>
             <div class = "col position-relative" id = "user-details">
                 <table class = "table-responsive-lg ms-4 position-absolute top-50 start-0 translate-middle-y">
-                    <tr><th>ID</th><td colspan = "2">{{ user.id }}</td></tr>
+                    <tr><th>ID</th><td colspan = "2">{{ user._id }}</td></tr>
                     <tr><th>Email</th><td colspan = "2">{{ user.email }}</td></tr>
-                    <tr *ngIf = "user.role == 'Super Admin' || user.role == 'Group Admin'">
+                    <tr *ngIf = "user.superOrAdmin != 'none'">
                         <th>Role</th>
-                        <td>{{ user.role }}</td>
+                        <td class = "text-capitalize">{{ user.superOrAdmin }}</td>
                         <td class = "text-end"><button type = "button" class = "btn btn-sm py-0 px-1" (click) = "openModal('admin')"><i class = "bi bi-gear-fill"></i></button></td>
                     </tr>
                     <tr><th>Last active</th><td colspan = "2">{{ user.lastActive }}</td></tr>

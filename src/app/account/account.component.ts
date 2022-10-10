@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router, ActivatedRoute } from '@angular/router';
+import { UserDataService } from '../services/user-data.service';
 
 import { GroupDetailsComponent } from '../group-details/group-details.component';
 
@@ -13,7 +14,8 @@ export class AccountComponent implements OnInit {
 
   constructor(private modalService: NgbModal,
     private router: Router,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private userService: UserDataService) { }
 
   user: any = {};
   userID: any = "";
@@ -23,9 +25,11 @@ export class AccountComponent implements OnInit {
 
   ngOnInit(): void {
 
-    if (localStorage.length == 0) {
-      this.router.navigateByUrl("");
-    }
+    console.log("run account");
+
+    // if (localStorage.length == 0) {
+    //   this.router.navigateByUrl("");
+    // }
 
     this.route.paramMap.subscribe(
       params => {
@@ -33,7 +37,11 @@ export class AccountComponent implements OnInit {
       }
     );
 
-    this.getData();
+    this.userService.getUserByID(this.userID).subscribe((res) => {
+      this.user = res.userData;
+    });
+
+    // this.getData();
   }
 
   getData() {
