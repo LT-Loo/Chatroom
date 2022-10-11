@@ -1,16 +1,21 @@
 /* Route to update item in specific collection in database */
 
+const bcrypt = require("bcrypt");
+
 module.exports = function(db, app, ObjectID) {
     app.post("/update", async function(req, res) {
 
         if (!req.body) {return res.sendStatus(400);}
 
         let data = req.body;
-        let itemID = new ObjectID(data._id);
+        let itemID = new ObjectID(data.data._id);
+        console.log("updatteeeee");
+
+        if ("password" in data.data) {data.data.password = await bcrypt.hash(data.data.password, 10);}
 
         const collection = db.collection(data.collection);
-        delete data["_id"];
-        let result = await collection.updateOne({_id: itemID}, {$set: data});
+        delete data.data["_id"];
+        let result = await collection.updateOne({_id: itemID}, {$set: data.data});
         if (result.matchedCount == 1) {
             console.log(`Successfully update data in ${data.collection}.`);
             res.send({success: true});

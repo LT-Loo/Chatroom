@@ -112,8 +112,14 @@
                     <div class = "col ps-2 pe-1">
                         <input class = "form-control" name = "message" placeholder = "Write a message...">   
                     </div>
-                    <div class = "col-1 text-center px-1">
-                        <button class = "btn btn-primary" type = "button">Send</button>
+                    <div class = "col-2 btn-group text-center px-1">
+                        <button *ngIf = "chat.imageNum > 0;" class = "btn btn-danger me-2 rounded" (click) = clearImage()><i class = "bi bi-file-earmark-x-fill"></i></button>
+                        <button class = "btn btn-secondary me-2 rounded position-relative" type = "button" (click) = "fileInput.click()">
+                            <i class = "bi bi-images"></i>
+                            <span *ngIf = "chat.imageNum > 0;" class = "position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{ chat.imageNum }}</span>
+                            <input #fileInput type = "file" (change) = "onFileSelected($event)" style = "display: none;" multiple>
+                        </button>
+                        <button class = "btn btn-primary rounded" type = "button" (click) = "sendChat()">Send</button>
                     </div>
                     
                 </div>

@@ -21,4 +21,6 @@ export class UserDataService {
   getAllUsers() {return this.http.post<any>("http://localhost:3000/getAll", {collection: "user"});}
 
   upgradeUser(data: any) {return this.http.post<any>("http://localhost:3000/upgradeUser", data);}
+
+  updateUser(data: any) {return this.http.post<any>("http://localhost:3000/update", {collection: "user", data: data});}
 }

@@ -2,16 +2,19 @@
 
 <div class = "screen">
     <div class = "container min-vh-100">
-        <div class = "row" id = "user">
-            <div class = "col-10 text-capitalize" id = "username"><h1>{{ user.username }}</h1></div>
-            <div class = "col-2" id = "logout">
-                <button type = "button" class = "logout btn" (click) = "logout()"><strong>LOGOUT</strong></button>        
+        <div class = "row align-items-center" id = "user">
+            <div class = "col" id = "username"><h1>{{ user.username }}</h1></div>
+            <div class = "col-5 col-lg-3 text-end">
+                <div class = "btn-group">
+                    <button type = "button" class = "btn btn-secondary rounded me-2 py-1" (click) = "openModal('settings')">Settings</button>
+                    <button type = "button" class = "btn btn-outline-primary rounded py-1" (click) = "logout()">LOGOUT</button>       
+                </div>   
             </div>
         </div>
         <hr class = "mt-1">
         <div class = "row py-1 mx-auto" id = "user-data">
             <div class = "col-3 position-relative" id = "user-pfp">
-                <img src = "../../assets/img/user.png" class = "img-thumbnail position-absolute top-50 start-50 translate-middle">
+                <img src = "http://localhost:3000\images\{{user.pfp}}" class = "img-thumbnail position-absolute top-50 start-50 translate-middle">
             </div>
             <div class = "col position-relative" id = "user-details">
                 <table class = "table-responsive-lg ms-4 position-absolute top-50 start-0 translate-middle-y">

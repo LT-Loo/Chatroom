@@ -9,6 +9,7 @@ module.exports = function(db, app) {
 
         let data = req.body;
         data.password = await bcrypt.hash("password", 10);
+        data.pfp = "user.png";
 
         const collection = db.collection("user");
         let result = await collection.insertOne(data);

@@ -6,6 +6,7 @@
     <h5 *ngIf = "modal == 'newGroup';" class = "modal-title">Create New Group</h5>
     <h5 *ngIf = "modal == 'admin';" class = "modal-title">Admin Tab</h5>
     <h5 *ngIf = "modal == 'addMember' && select != '';" class = "modal-title">Add Member to {{ selectChn.channelName }}</h5>
+    <h5 *ngIf = "modal == 'settings';" class = "modal-title">Account Settings</h5>
     <button type = "button" class = "btn-close" (click) = "closeModal('close')"></button>
 </div>
 
@@ -26,6 +27,48 @@
                 <ng-template #option2>
                     <p class = "roomname border border-secondary rounded-pill px-3 py-1 mb-0" (click) = "selectChannel(channel.channelID)">{{ channel.channelName }}</p>
                 </ng-template>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf = "modal == 'settings';">
+        <div class = "row mb-3">
+            <h5>Change Profile Picture</h5>
+            <div class = "col-3">
+                <label class = "form-label mb-0">Current Photo</label>
+                <img src = "http://localhost:3000/images/{{ user.pfp }}" class = "img-thumbnail">
+            </div>
+            <div class = "col d-flex flex-column pe-0">
+                <div class = "row w-100">
+                    <label class = "form-label">New Profile Picture</label>
+                    <input type = "file" class = "form-control" (change) = "onFileSelected($event)">      
+                </div>
+                <div class = "row w-100 text-end flex-grow-1 align-items-end">
+                    <div class = "px-0">
+                        <button type = "button" class = "btn btn-primary" (click) = "onUpload()">Save Change</button>
+                    </div>
+                </div>   
+            </div>
+        </div>
+        <hr>
+        <div class = "row mb-3">
+            <h5>Change Password</h5>
+            <p *ngIf = "settings.blank" class = "fs-6 fw-light text-danger mb-0 pb-0">* Please fill in both fields.</p>
+            <p *ngIf = "!settings.match" class = "fs-6 fw-light text-danger mb-0 pb-0">* Passwords do not match.</p>
+            <label class = "col-lg-3 col-form-label">New Password</label>
+            <div class = "col">
+                <input type = "password" class = "form-control" name = "newPwd" [(ngModel)] = "settings.newPwd">
+            </div>
+        </div>
+        <div class = "row mb-3">
+            <label class = "col-lg-3 col-form-label">Confirm Password</label>
+            <div class = "col">
+                <input type = "password" class = "form-control" name = "confirmPwd" [(ngModel)] = "settings.confirmPwd">
+            </div>
+        </div>
+        <div class = "row mb-3 text-end">
+            <div>
+                <button type = "button" class = "btn btn-primary" (click) = "changePassword()">Save Password</button>    
             </div>
         </div>
     </div>

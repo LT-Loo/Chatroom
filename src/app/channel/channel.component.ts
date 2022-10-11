@@ -4,6 +4,7 @@ import { ObjectId } from 'mongodb';
 
 import { UserDataService } from '../services/user-data.service';
 import { GroupChannelDataService } from '../services/group-channel-data.service';
+import { ImageUploadService } from '../services/image-upload.service';
 
 @Component({
   selector: 'app-channel',
@@ -15,7 +16,8 @@ export class ChannelComponent implements OnInit {
   constructor(private router: Router,
     private route: ActivatedRoute,
     private userService: UserDataService,
-    private groupService: GroupChannelDataService) { }
+    private groupService: GroupChannelDataService,
+    private imageService: ImageUploadService) { }
 
   groupID: any = "";
   channelID: any = "";
@@ -25,6 +27,12 @@ export class ChannelComponent implements OnInit {
   channel: any = {};
   members: any[] = [];
   group: any = {};
+  
+  chat: any = {
+    message: "",
+    images: null,
+    imageNum: 0,
+  }
 
   ngOnInit(): void {
 
@@ -145,6 +153,46 @@ export class ChannelComponent implements OnInit {
 
     // localStorage.setItem("Members", JSON.stringify(mbrList));
     // this.ngOnInit();
+  }
+
+  onFileSelected(event: any) {
+    this.chat.images = event.target.files; 
+    this.chat.imageNum = this.chat.images.length;
+    console.log("select file");
+    console.log(this.chat.images);
+  }
+
+  clearImage() {
+    this.chat.images = null;
+    this.chat.imageNum = 0;
+  }
+
+  sendChat() {
+    const fd = new FormData();
+
+    if (this.chat.imageNum > 0) {
+      for (let i = 0; i < this.chat.imageNum; i++) {
+        fd.append('images', this.chat.images[i]);
+      }
+      this.imageService.chatImgUpload(fd).subscribe(res => {
+        if (res.success) {console.log(res.filenames);}
+      });
+    }
+    // fd.append('image', this.settings.file, this.settings.file.name);
+
+    // this.imageService.imgUpload(fd).subscribe(res => {
+    //   if (res.success) {
+    //     // let imagepath = res.filename;
+    //     let data = {
+    //       _id: this.user._id,
+    //       pfp: res.filename
+    //     }
+    //     this.userService.updateUser(data).subscribe(res => {
+    //       if (res.success) {this.closeModal();}
+    //     });
+    //   }
+      // console.log("to serverrrr");
+    // });
   }
 
 }

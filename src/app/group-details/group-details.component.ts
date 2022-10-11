@@ -5,6 +5,7 @@ import { v4 as uuid4 } from 'uuid';
 
 import { UserDataService } from '../services/user-data.service';
 import { GroupChannelDataService } from '../services/group-channel-data.service';
+import { ImageUploadService } from '../services/image-upload.service';
 
 @Component({
   selector: 'app-group-details',
@@ -72,10 +73,20 @@ export class GroupDetailsComponent implements OnInit {
     roleEmpty: false
   }
 
+  settings: any = {
+    file: null,
+    imagepath: "",
+    newPwd: "",
+    confirmPwd: "",
+    match: true,
+    blank: false
+  }
+
   constructor(public activeModal: NgbActiveModal,
     private router: Router,
     private userService: UserDataService,
-    private groupService: GroupChannelDataService) { }
+    private groupService: GroupChannelDataService,
+    private imageService: ImageUploadService) { }
 
   ngOnInit(): void {
     this.modal = this.fromParent.modal;
@@ -509,6 +520,56 @@ export class GroupDetailsComponent implements OnInit {
     // localStorage.setItem("Channels", JSON.stringify(chnList));
     // localStorage.setItem("Members", JSON.stringify(mbrList));
     // this.activeModal.close();
+  }
+
+  onFileSelected(event: any) {
+    this.settings.file = event.target.files[0]; 
+    console.log("select file");
+    console.log(this.settings.file);
+  }
+
+  onUpload() {
+    const fd = new FormData();
+    fd.append('images', this.settings.file, this.settings.file.name);
+
+    this.imageService.imgUpload(fd).subscribe(res => {
+      if (res.success) {
+        // let imagepath = res.filename;
+        let data = {
+          _id: this.user._id,
+          pfp: res.filename
+        }
+        this.userService.updateUser(data).subscribe(res => {
+          if (res.success) {this.closeModal();}
+        });
+      }
+      // console.log("to serverrrr");
+    });
+  }
+
+  changePassword() {
+    if (this.settings.newPwd == "" || this.settings.confirmPwd == "") {
+      this.settings.blank = true;
+      return;
+    } else {this.settings.blank = false;}
+
+    if (this.settings.newPwd != this.settings.confirmPwd) {this.settings.match = false; return;}
+    else {this.settings.match = true;}
+
+    if (confirm("Confirm to change password?")) {
+      let data = {
+        _id: this.user._id,
+        password: this.settings.newPwd
+      };
+
+      this.userService.updateUser(data).subscribe(res => {
+        if (res.success) {
+          if (confirm("Password changed successfully.")) {this.closeModal();}
+        }
+      })
+    }
+
+
   }
 
 }

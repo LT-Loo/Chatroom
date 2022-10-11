@@ -12,13 +12,23 @@ app.use(cors());
 // For parsing JSON data
 var bodyParser = require("body-parser");
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 
 // MongoDB Client
 var MongoClient = require("mongodb").MongoClient;
 var objectID = require("mongodb").ObjectId; // For ObjectID functionality
 
+// Image Upload
+const formidable = require("formidable");
+const path = require("path");
+var fs = require("fs");
+
+// Socket for chat communication
+const io = require("socket.io");
+
 // Point static path to serve Angular app
 app.use(express.static(__dirname + "/../dist/chat-system/"));
+app.use('/images', express.static(path.join(__dirname, "./images")));
 
 // Start server in port 3000
 const PORT = 3000;
@@ -46,6 +56,7 @@ MongoClient.connect(URL, {useNewUrlParser: true, useUnifiedTopology: true}, func
     require("./routes/deleteMany.js")(db, app);
     require("./routes/update.js")(db, app, objectID);
     require("./routes/push.js")(db, app, objectID);
+    require("./routes/upload.js")(db, app, formidable, fs, path, objectID);
 
     // Start server
     app.listen(PORT, () => {
