@@ -19,4 +19,30 @@ module.exports = function(db, app, ObjectID) {
             res.send({success: false});
         }
     });
+
+    app.post("/upgradeUser", async function(req, res) {
+
+        if (!req.body) {return res.sendStatus(400);}
+
+        let data = req.body;
+        // let itemID = new ObjectID(data._id);
+
+        let user = await db.collection("user").findOne({username: data.username});
+        console.log(user);
+        // const collection = db.collection(data.collection);
+        // delete data["username"];
+        let userChg = await db.collection("user").updateOne({_id: user._id}, {$set: {superOrAdmin: data.role}});
+
+        let mbrChg = {};
+        if (data.role == "super") {mbrChg = await db.collection("member").updateMany({userID: user._id.toString()}, {$set: {role: data.role}});}
+        else {mbrChg.acknowledged = true;}
+        
+        if (userChg.acknowledged && mbrChg.acknowledged) {
+            console.log(`Successfully upgrade role for ${data.username}.`);
+            res.send({success: true});
+        } else {
+            console.log(`Failed to upgrade role for ${data.username}.`);
+            res.send({success: false});
+        }
+    });
 }

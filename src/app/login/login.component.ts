@@ -33,7 +33,10 @@ export class LoginComponent implements OnInit {
       this.error = false;
       this.service.login({username: this.username, password: this.password}).subscribe((res) => {
         this.valid = res.success;
-        if (this.valid) {this.router.navigateByUrl('account/' + res.userData._id);}
+        if (this.valid) {
+          sessionStorage.setItem("auth", res.userData._id);
+          this.router.navigateByUrl('account/' + res.userData._id);
+        }
       });  
     } else {this.error = true;}
     

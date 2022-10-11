@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router, ActivatedRoute } from '@angular/router';
-import { UserDataService } from '../services/user-data.service';
+import * as _ from 'lodash';
 
+import { UserDataService } from '../services/user-data.service';
 import { GroupDetailsComponent } from '../group-details/group-details.component';
 
 @Component({
@@ -27,9 +28,9 @@ export class AccountComponent implements OnInit {
 
     console.log("run account");
 
-    // if (localStorage.length == 0) {
-    //   this.router.navigateByUrl("");
-    // }
+    if (sessionStorage.length == 0) {
+      this.router.navigateByUrl("");
+    }
 
     this.route.paramMap.subscribe(
       params => {
@@ -37,9 +38,22 @@ export class AccountComponent implements OnInit {
       }
     );
 
+    // this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+
     this.userService.getUserByID(this.userID).subscribe((res) => {
       this.user = res.userData;
+      this.userService.getUserGroups(this.userID).subscribe((res) => {
+        if (res.success) {
+          this.channels = res.list;
+          let grps = _.groupBy(res.list, grp => grp.groupID);
+          // console.log("grps", grps);
+          this.groups = Object.keys(grps).map(key => ({id: key, value: grps[key]}));
+          console.log("groups", this.groups);
+        }
+      });
     });
+
+    // console.log(this.user);
 
     // this.getData();
   }
@@ -65,26 +79,26 @@ export class AccountComponent implements OnInit {
   }
 
   logout() {
-    localStorage.clear();
+    sessionStorage.clear();
     this.router.navigateByUrl("");
   }
 
-  joinChannel(group: number, channel: number) {
+  joinChannel(group: string, channel: string) {
     let url = "channel/" + group + "/" + channel;
     this.router.navigateByUrl(url);
   }
 
-  openModal(modalName: string, groupID: number = -1) {
+  openModal(modalName: string, groupID: string = "") {
     const modal = this.modalService.open(GroupDetailsComponent, {
       scrollable: true,
       size: 'lg',
       centered: true
     });
 
-    console.log(groupID);
+    // console.log(modalName);
 
     let data = {};
-    if (groupID < 0) {
+    if (groupID == "") {
       data = {
         modal: modalName,
         user: this.user
@@ -94,15 +108,17 @@ export class AccountComponent implements OnInit {
       data = {
        modal: modalName,
        user: this.user,
-       group: this.groups.find(x => x.id == groupID),
+       groupID: groupID,
        channels: this.channels.filter(x => x.groupID == groupID),
-       members: this.members
+      //  members: this.members
       }
     }
 
     modal.componentInstance.fromParent = data;
     modal.result.then((result) => {
-        this.getData();
+        // this.getData();
+        // console.log("modal close");
+        this.ngOnInit();
     });
   }
 

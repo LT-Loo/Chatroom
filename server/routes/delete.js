@@ -6,7 +6,7 @@ module.exports = function(db, app, ObjectID) {
         if (!req.body) {return res.sendStatus(400);}
 
         let data = req.body;
-        let itemID = new ObjectID(data._id)
+        let itemID = new ObjectID(data._id);
 
         const collection = db.collection(data.collection);
         let result = await collection.deleteOne({_id: itemID});
@@ -19,6 +19,45 @@ module.exports = function(db, app, ObjectID) {
             res.send({success: false});
         }
 
+    });
+
+    app.post("/deleteGroup", async function(req, res) {
+
+        if (!req.body) {return res.sendStatus(400);}
+
+        let id = req.body.id;
+        let groupID = new ObjectID(id);
+
+        let grpRes = await db.collection("group").deleteOne({_id: groupID});
+        let chnRes = await db.collection("channel").deleteMany({groupID: id});
+        let mbrRes = await db.collection("member").deleteMany({groupID: id});
+
+        if (grpRes.acknowledged && chnRes.acknowledged && mbrRes.acknowledged) {
+            console.log(`Successfully deleted group ${id}`);
+            return await res.send({success: true});
+        } else {
+            console.log(`Failed to delete group ${id}`);
+            return await res.send({success: false});
+        }
+    });
+
+    app.post("/deleteChannel", async function(req, res) {
+
+        if (!req.body) {return res.sendStatus(400);}
+
+        let id = req.body.id;
+        let channelID = new ObjectID(id);
+
+        let chnRes = await db.collection("channel").deleteOne({_id: channelID});
+        let mbrRes = await db.collection("member").deleteMany({channelID: id});
+
+        if (chnRes.acknowledged && mbrRes.acknowledged) {
+            console.log(`Successfully deleted channel ${id}`);
+            return await res.send({success: true});
+        } else {
+            console.log(`Failed to delete channel ${id}`);
+            return await res.send({success: false});
+        }
     });
 
     

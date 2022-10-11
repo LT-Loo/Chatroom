@@ -5,33 +5,26 @@
     <h5 *ngIf = "modal == 'newChannel';" class = "modal-title">Create New Channel</h5>
     <h5 *ngIf = "modal == 'newGroup';" class = "modal-title">Create New Group</h5>
     <h5 *ngIf = "modal == 'admin';" class = "modal-title">Admin Tab</h5>
-    <h5 *ngIf = "modal == 'addMember';" class = "modal-title">Add Member to {{ selectName.name }}</h5>
+    <h5 *ngIf = "modal == 'addMember' && select != '';" class = "modal-title">Add Member to {{ selectChn.channelName }}</h5>
     <button type = "button" class = "btn-close" (click) = "closeModal('close')"></button>
 </div>
 
 <div class = "modal-body pt-2 pb-1">
     <div *ngIf = "modal == 'details';">
-        <div class = "row">
-            <div class = "col">
-                <i class = "bi bi-person-badge pe-1"></i>Group Admin: XXX<br>
-                <i class = "bi bi-person-badge-fill pe-1"></i>Group Assis: XXX
+        <div class = "row align-items-center">
+            <div class = "col text-secondary">Group created on {{ group.dateTime | date }}</div>
+            <div class = "col-4 btn-group justify-content-end">
+                <button *ngIf = "user.role == 'super' || user.role == 'admin'" type = "button" class = "btn btn-danger py-1 px-0 rounded me-2" (click) = "deleteItem('Group')">Delete Group</button>
+                <button *ngIf = "user.role != 'member'" type = "button" class = "btn btn-primary py-1 px-0 rounded" (click) = "addMember()">Add Member</button>
             </div>
-            <div class = "col align-self-end text-end">
-                <button *ngIf = "fromParent.user.role == 'Super Admin' || fromParent.user.role == 'Group Admin'" type = "button" class = "btn btn-danger py-1" (click) = "deleteItem('Group')">Delete Group</button>
-            </div>
+            
         </div>
-        <hr class = "my-2 py-0">
-        <div class = "row">
-            <p class = "mb-2 col"><i class = "bi bi-chat-dots pe-1"></i>Online Members: XX</p>
-            <div *ngIf = "fromParent.user.role != 'User';" class = "col text-end">
-                <button type = "button" class = "btn btn-primary py-1" (click) = "addMember()">Add Member</button>
-            </div>
-        </div>
+        <hr class = "mb-0 mt-2">
         <div class = "row row-cols-3 row-cols-lg-5 py-3 mb-0">
             <div *ngFor = "let channel of fromParent.channels" class = "col-lg text-center mb-3">
-                <p *ngIf = "select == channel.id; else option2" class = "selectChannel border border-secondary rounded-pill px-3 py-1 mb-0 bg-secondary">{{ channel.name }}</p>
+                <p *ngIf = "select == channel.channelID; else option2" class = "selectChannel border border-secondary rounded-pill px-3 py-1 mb-0 bg-secondary">{{ channel.channelName }}</p>
                 <ng-template #option2>
-                    <p class = "roomname border border-secondary rounded-pill px-3 py-1 mb-0" (click) = "selectChannel(channel.id)">{{ channel.name }}</p>
+                    <p class = "roomname border border-secondary rounded-pill px-3 py-1 mb-0" (click) = "selectChannel(channel.channelID)">{{ channel.channelName }}</p>
                 </ng-template>
             </div>
         </div>
@@ -39,10 +32,11 @@
 
     <div *ngIf = "modal == 'addMember';" class = "container mt-2">
         <div class = "row mb-3">
-            <label class = "col-2 col-lg-1 col-form-label">Name</label>
+            <label class = "col-2 col-lg-1 col-form-label">Userame</label>
             <div class = "col-8">
                 <input type = "text" class = "form-control" placeholder = "Add a User" [(ngModel)] = "addToChannel.member">
                 <p *ngIf = "addToChannel.invalidMember" class = "fs-6 fw-light text-danger mb-0 pb-0">* Invalid user.</p>
+                <p *ngIf = "addToChannel.memberEmpty" class = "fs-6 fw-light text-danger mb-0 pb-0">* Username required.</p>
                 <ul class = "ps-3 mt-2">
                     <li *ngFor = "let member of addToChannel.memberList">{{ member }}</li>
                 </ul>
@@ -59,6 +53,7 @@
             <div class = "col-8">
                 <input type = "text" class = "form-control" placeholder = "Channel Name" [(ngModel)] = "newChannel.name">
                 <p *ngIf = "newChannel.invalidChannel" class = "fs-6 fw-light text-danger mb-0 pb-0">* Channel already exists.</p>
+                <p *ngIf = "newChannel.channelEmpty" class = "fs-6 fw-light text-danger mb-0 pb-0">* Channel name required.</p>
             </div> 
         </div>
         <div class = "row mb-3">
@@ -66,6 +61,7 @@
             <div class = "col-8">
                 <input type = "text" class = "form-control" placeholder = "Add a member" [(ngModel)] = "newChannel.member">
                 <p *ngIf = "newChannel.invalidMember" class = "fs-6 fw-light text-danger mb-0 pb-0">* Invalid user.</p>
+                <p *ngIf = "newChannel.memberEmpty" class = "fs-6 fw-light text-danger mb-0 pb-0">* Username required.</p>
             </div>
             <div class = "col-1 p-0">
                 <button type = "button" class = "btn btn-outline-primary" (click) = "newChannelAddMember()">Add</button>
@@ -85,7 +81,7 @@
             <label class = "col-2 col-lg-1 col-form-label me-2">Name</label>
             <div class = "col-8">
                 <input type = "text" class = "form-control" placeholder = "Group Name" [(ngModel)] = "newGroup.name">
-                <p *ngIf = "newGroup.invalidGroup" class = "fs-6 fw-light text-danger mb-0 pb-0">* Group already exists.</p>
+                <!-- <p *ngIf = "newGroup.invalidGroup" class = "fs-6 fw-light text-danger mb-0 pb-0">* Group already exists.</p> -->
             </div> 
         </div>
         <div class = "row mb-3">
@@ -93,6 +89,7 @@
             <div class = "col-8">
                 <input type = "text" class = "form-control" placeholder = "Add a channel" [(ngModel)] = "newGroup.channel">
                 <p *ngIf = "newGroup.invalidChannel" class = "fs-6 fw-light text-danger mb-0 pb-0">* Channel already exists.</p>
+                <p *ngIf = "newGroup.channelEmpty" class = "fs-6 fw-light text-danger mb-0 pb-0">* Channel name is required.</p>
             </div>
             <div class = "col-1 p-0">
                 <button type = "button" class = "btn btn-outline-primary" (click) = "newGroupAddChannel()">Add</button>
@@ -122,25 +119,15 @@
                             <div class = "col">
                                 <input class = "form-control" placeholder = "Username" [(ngModel)] = "newUser.username"> 
                                 <p *ngIf = "!newUser.validUser" class = "fs-6 fw-light text-danger mb-0 pb-0">* User already exists.</p>
+                                <p *ngIf = "newUser.nameEmpty" class = "fs-6 fw-light text-danger mb-0 pb-0">* Username is required.</p>
                             </div>
                         </div>
                         <div class = "row mb-3">
                             <label class = "col-2 col-lg-1 col-form-label me-2">Email</label>
                             <div class = "col">
                                 <input class = "form-control" placeholder = "Email" [(ngModel)] = "newUser.email"> 
+                                <p *ngIf = "newUser.emailEmpty" class = "fs-6 fw-light text-danger mb-0 pb-0">* Email is required.</p>
                             </div>
-                        </div>
-                        <div class = "row mb-3">
-                            <label class = "col-2 col-lg-1 col-form-label me-2">Role</label>
-                            <div class = "col">
-                                <select class = "form-select" [(ngModel)] = "newUser.role">
-                                    <option value = "User">User</option>
-                                    <option value = "Group Assis">Group Assis</option>
-                                    <option *ngIf = "fromParent.user.role == 'Super Admin';" value = "Group Admin">Group Admin</option>
-                                    <option *ngIf = "fromParent.user.role == 'Super Admin';" value = "Super Admin">Super Admin</option>
-                                </select>
-                                <p *ngIf = "newUser.empty" class = "fs-6 fw-light text-danger mb-0 pb-0">* Username and email required.</p>    
-                            </div> 
                         </div>
                         <div class = "row d-grid gap-2 col-4 mx-auto">
                             <button type = "button" class = "btn btn-primary" (click) = "createUser()">Create</button>
@@ -160,7 +147,7 @@
                             <label class = "col-2 col-lg-1 col-form-label me-2">Name</label>
                             <div class = "col">
                                 <input type = "text" class = "form-control" placeholder = "Group Name" [(ngModel)] = "newGroup.name">
-                                <p *ngIf = "newGroup.invalidGroup" class = "fs-6 fw-light text-danger mb-0 pb-0">* Group already exists.</p>
+                                <!-- <p *ngIf = "newGroup.invalidGroup" class = "fs-6 fw-light text-danger mb-0 pb-0">* Group already exists.</p> -->
                             </div> 
                         </div>
                         <div class = "row mb-3">
@@ -170,6 +157,7 @@
                                 <p *ngIf = "newGroup.invalidChannel" class = "fs-6 fw-light text-danger mb-0 pb-0">* Channel already exists.</p>
                                 <ul class = "ps-4 mt-2">
                                     <li *ngFor = "let channel of newGroup.channelList">{{ channel }}</li>
+                                    <p *ngIf = "newGroup.channelEmpty" class = "fs-6 fw-light text-danger mb-0 pb-0">* Channel name is required.</p>
                                 </ul>
                             </div>
                             <div class = "col-1 p-0">
@@ -182,7 +170,7 @@
                     </div>
                 </div>
             </div>
-            <div class = "accordion-item">
+            <div *ngIf = "user.superOrAdmin == 'super'" class = "accordion-item">
                 <h2 class = "accordion-header">
                     <button class = "accordion-button py-2" type = "button" data-bs-toggle = "collapse" data-bs-target = "#upgradeUser">
                         Change Role
@@ -195,17 +183,18 @@
                             <div class = "col">
                                 <input type = "text" class = "form-control" placeholder = "Username" [(ngModel)] = "chgRole.username">
                                 <p *ngIf = "!chgRole.validUser" class = "fs-6 fw-light text-danger mb-0 pb-0">* Invalid user.</p>
+                                <p *ngIf = "chgRole.userEmpty" class = "fs-6 fw-light text-danger mb-0 pb-0">* Username required.</p>
                             </div> 
                         </div>
                         <div class = "row mb-3 align-items-center">
                             <label class = "col-2 col-lg-1 col-form-label me-2">New Role</label>
                             <div class = "col">
                                 <select class = "form-select" [(ngModel)] = "chgRole.role">
-                                    <option value = "User">User</option>
-                                    <option value = "Group Assis">Group Assis</option>
-                                    <option *ngIf = "fromParent.user.role == 'Super Admin';" value = "Group Admin">Group Admin</option>
-                                    <option *ngIf = "fromParent.user.role == 'Super Admin';" value = "Super Admin">Super Admin</option>
-                                </select>    
+                                    <option selected value = "Choose Role">Choose Role</option>
+                                    <option selected value = "super">Super Admin</option>
+                                    <option value = "admin">Group Admin</option>
+                                </select>  
+                                <p *ngIf = "chgRole.roleEmpty" class = "fs-6 fw-light text-danger mb-0 pb-0">* Please choose a role.</p>  
                             </div> 
                         </div>
                         <div class = "row d-grid gap-2 col-4 mx-auto">
@@ -221,9 +210,9 @@
 
 <div *ngIf = "modal == 'details';" class = "modal-footer py-2 justify-content-between">
     <!-- If Group Admin/Group Assis-->
-    <button *ngIf = "fromParent.user.role != 'User'" type = "button" class = "btn btn-secondary py-1" (click) = "createChannel()">Create Channel</button>
+    <button *ngIf = "user.role != 'member'" type = "button" class = "btn btn-secondary py-1" (click) = "createChannel()">Create Channel</button>
     <div>
-        <button *ngIf = "fromParent.user.role == 'Super Admin' || fromParent.user.role == 'Group Admin'" type = "button" class = "btn btn-danger py-1" (click) = "deleteItem('Channel')">Delete Channel</button>
+        <button *ngIf = "user.role == 'super' || user.role == 'admin'" type = "button" class = "btn btn-danger py-1" (click) = "deleteItem('Channel')">Delete Channel</button>
         <button type = "button" class = "btn btn-primary py-1 ms-2" (click) = "joinChannel()">Join Channel</button>
     </div>    
 </div>

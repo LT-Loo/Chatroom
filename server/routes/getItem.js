@@ -7,6 +7,7 @@ module.exports = function(db, app, ObjectID) {
 
         let data = req.body;
         let itemID = new ObjectID(data._id);
+        console.log(data._id);
 
         const collection = db.collection(data.collection);
         let item = await collection.findOne({"_id": itemID});
