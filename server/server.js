@@ -24,7 +24,12 @@ const path = require("path");
 var fs = require("fs");
 
 // Socket for chat communication
-const io = require("socket.io");
+const io = require("socket.io")(http, {
+    cors: {
+        origin: "http://localhost:4200",
+        methods: ["GET", "POST"]
+    }
+});
 
 // Point static path to serve Angular app
 app.use(express.static(__dirname + "/../dist/chat-system/"));
@@ -57,6 +62,8 @@ MongoClient.connect(URL, {useNewUrlParser: true, useUnifiedTopology: true}, func
     require("./routes/update.js")(db, app, objectID);
     require("./routes/push.js")(db, app, objectID);
     require("./routes/upload.js")(db, app, formidable, fs, path, objectID);
+
+    sockets.connect(io, PORT, db, objectID);
 
     // Start server
     app.listen(PORT, () => {
