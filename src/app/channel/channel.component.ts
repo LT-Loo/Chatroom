@@ -1,6 +1,5 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ObjectId } from 'mongodb';
 
 import { UserDataService } from '../services/user-data.service';
 import { GroupChannelDataService } from '../services/group-channel-data.service';
@@ -28,7 +27,7 @@ export class ChannelComponent implements OnInit {
   groups: any = {};
   channel: any = {};
   members: any[] = [];
-  group: any = {};
+  // group: any = {};
 
   msgConnection: any;
   leaveConnection: any;
@@ -36,7 +35,7 @@ export class ChannelComponent implements OnInit {
   joinConnection: any;
   chatHistory: any[] = [];
 
-  chatbox: any;
+  // chatbox: any;
   
   chat: any = {
     message: "",
@@ -47,133 +46,65 @@ export class ChannelComponent implements OnInit {
 
   ngOnInit(): void {
 
-    console.log("here is channel");
-
-    if (sessionStorage.length == 0) {
+    if (sessionStorage.length == 0) { // Redirect user to login page if not authenticated
       this.router.navigateByUrl("");
     }
 
-    this.route.paramMap.subscribe(
+    this.route.paramMap.subscribe( // Extract group and channel IDs from url
       params => {
         this.groupID = params.get("group");
         this.channelID = params.get("channel");
       }
     );
 
-    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false; // Reuse route
 
-    let userID = sessionStorage.getItem("auth");
+    let userID = sessionStorage.getItem("auth"); // Get user ID from session storage
 
     if (userID) {
-      this.userService.getUserByID(userID).subscribe((res) => {
+      this.userService.getUserByID(userID).subscribe((res) => { // Get user data
         if (res.success) {this.user = res.userData;}
-        this.userService.getUserChannels(userID, this.groupID).subscribe((res) => {
+        this.userService.getUserChannels(userID, this.groupID).subscribe((res) => { // Get channels user joined
           if (res.success) {
             this.channels = res.list;
             this.channel = res.list.find((x: any) => x.channelID == this.channelID);
             this.user.role = this.channel.role;
-            this.groupService.getChannelData(this.channelID).subscribe((res) => {
+            this.groupService.getChannelData(this.channelID).subscribe((res) => { // Get channel data
               if (res.success) {
                 this.members = res.list.members;
                 this.chatHistory = res.list.chat.history;
 
-                // this.chatService.initSocket();
-                // this.chatService.join(this.user.username, this.channelID);
-                // this.joinConnection = this.chatService.getJoin().subscribe(result => {
-                //   if (result) {
-                //     this.chatHistory = result.chatHistory;
-                //     // this.scroll.nativeElement.scrollTop = this.scroll.nativeElement.scrollHeight;
-
-                    
-                //   }
-                // });
-
+                // Listen for message from server 
                 this.msgConnection = this.chatService.getMessage().subscribe(data => {
-                  this.chatHistory.push(data);
-                  // this.scroll.nativeElement.scrollTop = this.scroll.nativeElement.scrollHeight;
-                  // console.log(data);
-                  // console.log(this.chatHistory);
+                  this.chatHistory.push(data); // Push message into array
                 });
-
-                
-                // console.log("chat history", this.chatHistory);
               }
-              // console.log(this.members);
             });
           }
         });
       });
-      // this.user = JSON.parse(usr);
-      // this.channels = JSON.parse(chns);
-      // this.groups = JSON.parse(grp);
-      // this.members = JSON.parse(mbrs);
-      // console.log("bfor:", this.members);
-
-      // this.msgConnection = this.chatService.getMessage().subscribe(data => {
-      //   this.chatHistory.push(data);
-      //   console.log(data);
-      //   console.log(this.chatHistory);
-      // });
     }
-
-
-    // this.channel = this.channels.find((x: any) => x.id == this.channelID);
-    // this.members = this.members.find((x: any) => x.channel == this.channelID && x.group == this.groupID);
-    // this.channels = this.channels.filter(x => x.groupID == this.groupID);
-    // this.group = this.groups.find((x: any) => x.id == this.groupID);
-    // console.log("usr:", this.user);
-    // console.log("grp:",this.group);
-    // console.log("chns:", this.channels);
-    // console.log("chn:", this.channel);
-    // console.log("mbr:", this.members);
   }
 
-  // ngAfterViewInit() {
-  //   this.chatbox = document.getElementById("chatbox");
-  //   this.chatbox.scrollTop = this.chatbox.scrollHeight;
-  // }
-
-  // join() {
-  //   if (sessionStorage.getItem("reload") == "0") {
-  //     this.chatService.initSocket();
-  //     sessionStorage.setItem("reload", "1");
-  //   } else {}
-  // }
-
+  // Leave channel
   leave() {
     this.router.navigateByUrl("account/" + this.user._id);
     this.chatService.leave();
-    // this.leaveConnection = this.chatService.getLeave().subscribe(res => {
-    //   if (res) {this.router.navigateByUrl("account/" + this.user._id);}
-    // })
-    
   }
 
+  // Delete current channel
   deleteChannel() {
-    this.groupService.deleteChannel(this.channelID).subscribe(res => {
+    this.groupService.deleteChannel(this.channelID).subscribe(res => { // Delete channel
       if (res.success) {
-        this.userService.getUserChannels(this.user._id, this.groupID).subscribe(res => {
+        this.userService.getUserChannels(this.user._id, this.groupID).subscribe(res => { // Get new list of channels
           this.channels = res.list;
-          this.switchChannel(this.channels[0].channelID);
+          this.switchChannel(this.channels[0].channelID); // Switch to first channel (default)
         });
       }
     });
-    // let chnList: any = localStorage.getItem("Channels");
-    // chnList = JSON.parse(chnList);
-    // let mbrList: any = localStorage.getItem("Members");
-    // mbrList = JSON.parse(mbrList);
-
-    // mbrList = mbrList.filter((x: any) => x.channel != this.channelID || x.group != this.groupID);
-    // chnList = chnList.filter((x: any) => x.id != this.channelID || x.groupID != this.groupID);
-
-    // localStorage.setItem("Channels", JSON.stringify(chnList));
-    // localStorage.setItem("Members", JSON.stringify(mbrList));
-
-    // this.channel = chnList.filter((x: any) => x.groupID == this.groupID);
-
-    // this.switchChannel(this.channels[0].channelID);
   }
 
+  // Switch channel
   switchChannel(channel: string) {
     let url = "channel/" + this.groupID + "/" + channel;
     this.chatService.switch(channel);
@@ -183,9 +114,8 @@ export class ChannelComponent implements OnInit {
     
   }
 
+  // Remove member from group or channel
   delete(from: string, userID: any) {
-    // let mbrList: any = localStorage.getItem("Members");
-    // mbrList = JSON.parse(mbrList);
 
     if (from == "Group") {
       this.groupService.deleteFromGroup(userID, this.groupID).subscribe(res => {
@@ -196,40 +126,21 @@ export class ChannelComponent implements OnInit {
         if (res.success) {this.ngOnInit();}
       });
     }
-
-    // let indArr = mbrList.reduce((arr: number[], x: any, ind: number) => {
-    //   if (from == "Group") {
-    //     if (x.group == this.groupID) {arr.push(ind);}
-    //   } else {
-    //     if (x.group == this.groupID && x.channel == this.channelID) {arr.push(ind);}
-    //   }
-    //   return arr;
-    // }, []);
-
-    // console.log(userID);
-
-    // for (let i of indArr) {
-    //   mbrList[i].members = mbrList[i].members.filter((x: any) => x.userID != userID);
-    // }
-
-    // console.log(mbrList);
-
-    // localStorage.setItem("Members", JSON.stringify(mbrList));
-    // this.ngOnInit();
   }
 
+  // Get files uploaded by user
   onFileSelected(event: any) {
     this.chat.images = event.target.files; 
     this.chat.imageNum = this.chat.images.length;
-    console.log("select file");
-    console.log(this.chat.images);
   }
 
+  // Clear image files
   clearImage() {
     this.chat.images = null;
     this.chat.imageNum = 0;
   }
 
+  // Send message to channel
   sendChat() {
     const fd = new FormData();
 
@@ -242,6 +153,7 @@ export class ChannelComponent implements OnInit {
       images: null
     }
 
+    // If image uploaded, store image in server
     if (this.chat.imageNum > 0) {
       for (let i = 0; i < this.chat.imageNum; i++) {
         fd.append('images', this.chat.images[i]);
@@ -249,12 +161,12 @@ export class ChannelComponent implements OnInit {
       this.imageService.imgUpload(fd).subscribe(res => {
         if (res.success) {
           chatData.images = res.filenames;
-          this.chatService.send(chatData);
-          console.log(res.filenames);
+          this.chatService.send(chatData); // Send message request to server
         }
       });
-    } else {this.chatService.send(chatData);}
+    } else {this.chatService.send(chatData);} // Send message request to server
 
+    // Reset message box
     this.chat = {
       message: "",
       images: null,
@@ -262,5 +174,4 @@ export class ChannelComponent implements OnInit {
       imgFilename: null
     }
   }
-
 }

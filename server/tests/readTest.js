@@ -1,3 +1,5 @@
+/* Restrieva Route Tests */
+
 let chai = require("chai");
 let chaiHttp = require("chai-http");
 let should = chai.should();
@@ -6,7 +8,7 @@ chai.use(chaiHttp);
 
 let URL = "http://localhost:3000";
 
-describe("Retrieval Item Route Tests", () => {
+describe("Retrieve Item Route Tests", () => {
 
     describe("Single Item", () => {
 

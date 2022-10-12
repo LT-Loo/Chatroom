@@ -2,6 +2,7 @@
 
 <div class = "screen">
     <div class = "container min-vh-100">
+
         <div class = "row align-items-center" id = "user">
             <div class = "col" id = "username"><h1>{{ user.username }}</h1></div>
             <div class = "col-5 col-lg-3 text-end">
@@ -11,7 +12,10 @@
                 </div>   
             </div>
         </div>
+
         <hr class = "mt-1">
+
+        <!-- User Details -->
         <div class = "row py-1 mx-auto" id = "user-data">
             <div class = "col-3 position-relative" id = "user-pfp">
                 <img src = "http://localhost:3000\images\{{user.pfp}}" class = "img-thumbnail position-absolute top-50 start-50 translate-middle">
@@ -20,6 +24,7 @@
                 <table class = "table-responsive-lg ms-4 position-absolute top-50 start-0 translate-middle-y">
                     <tr><th>ID</th><td colspan = "2">{{ user._id }}</td></tr>
                     <tr><th>Email</th><td colspan = "2">{{ user.email }}</td></tr>
+                    <!-- User Overall Role -->
                     <tr *ngIf = "user.superOrAdmin != 'none'">
                         <th>Role</th>
                         <td class = "text-capitalize">{{ user.superOrAdmin }}</td>
@@ -32,6 +37,7 @@
 
         <hr>
 
+        <!-- Group List -->
         <div class = "row mx-auto" id = "groups">
             <div class = "row m-0 px-0 pb-1">
                 <div class = "col p-0"><h2>Group ({{ groups.length }})</h2></div>
@@ -45,13 +51,6 @@
                         <div class = "group text-center border border-dark rounded py-1">
                             <h5 class = "mb-0">{{ group.value[0].groupname }}</h5>    
                         </div>
-                        
-                        <!-- <img src = "../../assets/img/user.png" class = "img-thumbnail rounded-circle">
-                        <div class = "dropdown-content">
-                            <div *ngFor = "let channel of channels" style = "z-index: 1000;">
-                                <a *ngIf = "channel.groupID == group.id" class = "dropdown-item" (click) = "joinChannel(group.id, channel.channelID)">{{ channel.channelName }}</a>
-                            </div>
-                        </div> -->
                     </div>
                 </div>
             </div>

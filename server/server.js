@@ -1,4 +1,4 @@
-// Server Side Chat System
+// Server Side
 
 // For routing
 var express = require("express");
@@ -16,9 +16,9 @@ const io = require("socket.io")(http, {
         methods: ["GET", "POST"]
     }
 });
-const sockets = require('./socket.js');
+const sockets = require('./socket.js'); 
 
-// For parsing JSON data
+// Data Parsing
 var bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -32,7 +32,7 @@ const formidable = require("formidable");
 const path = require("path");
 var fs = require("fs");
 
-// Point static path to serve Angular app
+// Point static path to serve Angular app and access images
 app.use(express.static(__dirname + "/../dist/chat-system/"));
 app.use('/images', express.static(path.join(__dirname, "./images")));
 
@@ -52,18 +52,19 @@ MongoClient.connect(URL, {useNewUrlParser: true, useUnifiedTopology: true}, func
     // Import routes
     require("./routes/login.js")(db, app);
     require("./routes/register.js")(db, app);
-    require("./routes/getUserByName.js")(db, app);
+    // require("./routes/getUserByName.js")(db, app);
     require("./routes/getUserByID.js")(db, app, objectID);
     require("./routes/getAll.js")(db, app);
     require("./routes/getList.js")(db, app);
     require("./routes/getItem.js")(db, app, objectID);
     require("./routes/create.js")(db, app, objectID);
-    require("./routes/delete.js")(db, app, objectID);
+    // require("./routes/delete.js")(db, app, objectID);
     require("./routes/deleteMany.js")(db, app);
     require("./routes/update.js")(db, app, objectID);
-    require("./routes/push.js")(db, app, objectID);
+    // require("./routes/push.js")(db, app, objectID);
     require("./routes/upload.js")(db, app, formidable, fs, path, objectID);
 
+    // Start socket to listen requests from frontend
     sockets.connect(io, PORT, db, objectID);
 
     // Start server
@@ -71,13 +72,4 @@ MongoClient.connect(URL, {useNewUrlParser: true, useUnifiedTopology: true}, func
         console.log("Server is listening on port: ", PORT);
     });
 
-    // module.exports = app;
 });
-
-// var server = app.listen(PORT, function() {
-//     console.log("Server is listening on port: " + server.address().port);
-// });
-
-/* ----- Route ----- */
-// For login request
-// app.post("/login", require("./login"));

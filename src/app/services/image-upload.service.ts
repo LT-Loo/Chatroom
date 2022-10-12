@@ -10,5 +10,4 @@ export class ImageUploadService {
 
   imgUpload(data: any) {return this.http.post<any>("http://localhost:3000/uploadImages", data);}
 
-  // chatImgUpload(data: any) {return this.http.post<any>("http://localhost:3000/uploadImgChat", data);}
 }

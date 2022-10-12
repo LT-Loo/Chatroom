@@ -2,6 +2,7 @@
 
 <div class = "screen">
     <div class = "row m-0 h-100 border">
+        <!-- Channel List -->
         <div class = "offcanvas-lg offcanvas-start col-2 p-0" id = "channel-listcol">
             <div class = "container position-relative m-auto vh-100">
                 <h3 id = "groupname" class = "mt-2 text-center">{{ channel.groupname }}</h3> 
@@ -19,6 +20,8 @@
                 </div>
             </div> 
         </div> 
+
+        <!-- Chatbox -->
         <div class = "col-lg-8">
             <div class = "container position-relative vh-100">
                 <button id = "open-channel-sidebar" type = "button" class = "btn btn-outline-primary px-2 py-0 mb-2" data-bs-toggle = "offcanvas" data-bs-target = "#channel-listcol"><i class = "bi bi-list"></i></button>
@@ -47,14 +50,15 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
-
                 </div>
+
+                <!-- Message box -->
                 <div class = "row position-absolute bottom-0 w-100 py-3">
                     <div class = "col ps-2 pe-1">
                         <input class = "form-control" name = "message" [(ngModel)] = "chat.message" placeholder = "Write a message...">   
                     </div>
+                    <!-- Upload Image -->
                     <div class = "col-2 btn-group text-center px-1">
                         <button *ngIf = "chat.imageNum > 0;" class = "btn btn-danger me-2 rounded" (click) = clearImage()><i class = "bi bi-file-earmark-x-fill"></i></button>
                         <button class = "btn btn-secondary me-2 rounded position-relative" type = "button" (click) = "fileInput.click()">
@@ -62,12 +66,15 @@
                             <span *ngIf = "chat.imageNum > 0;" class = "position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{ chat.imageNum }}</span>
                             <input #fileInput type = "file" (change) = "onFileSelected($event)" style = "display: none;" multiple>
                         </button>
+
+                        <!-- Send Button -->
                         <button class = "btn btn-primary rounded" type = "button" (click) = "sendChat()">Send</button>
                     </div>
-                    
                 </div>
             </div>
         </div>
+
+        <!-- Channel Member List -->
         <div class = "offcanvas-lg offcanvas-end col-2" id = "memberlistcol">
             <button id = "close-member-btn" type = "button" class = "btn-close" data-bs-dismiss = "offcanvas" data-bs-target = "#memberlistcol"></button>
             <h3 id = "memberlist" class = "mt-2 text-center">MEMBERS</h3>

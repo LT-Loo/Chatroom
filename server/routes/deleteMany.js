@@ -11,7 +11,6 @@ module.exports = function(db, app) {
         const collection = db.collection(data.collection);
         let result = await collection.deleteMany(data.data);
         if (result.deletedCount > 0) {
-            // let list = await collection.find().toArray();
             console.log(`Successfully delete items in ${data.collection}.`);
             res.send({success: true});
         } else {

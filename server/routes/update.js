@@ -3,18 +3,21 @@
 const bcrypt = require("bcrypt");
 
 module.exports = function(db, app, ObjectID) {
+
+    // Update item 
     app.post("/update", async function(req, res) {
 
         if (!req.body) {return res.sendStatus(400);}
 
         let data = req.body;
         let itemID = new ObjectID(data.data._id);
-
+        
+        // If data to update is password, encrypt password
         if ("password" in data.data) {data.data.password = await bcrypt.hash(data.data.password, 10);}
 
         const collection = db.collection(data.collection);
         delete data.data["_id"];
-        let result = await collection.updateOne({_id: itemID}, {$set: data.data});
+        let result = await collection.updateOne({_id: itemID}, {$set: data.data}); // Update data
         if (result.matchedCount == 1) {
             console.log(`Successfully update data in ${data.collection}.`);
             res.send({success: true});
@@ -24,20 +27,21 @@ module.exports = function(db, app, ObjectID) {
         }
     });
 
+    // Upgrade user role
     app.post("/upgradeUser", async function(req, res) {
 
         if (!req.body) {return res.sendStatus(400);}
 
         let data = req.body;
-        // let itemID = new ObjectID(data._id);
 
+        // Get user data
         let user = await db.collection("user").findOne({username: data.username});
         if (!user) {res.send({success: false});} 
-        // const collection = db.collection(data.collection);
-        // delete data["username"];
+
+        // Update overall role
         let userChg = await db.collection("user").updateOne({_id: user._id}, {$set: {superOrAdmin: data.role}});
 
-        let mbrChg = {};
+        let mbrChg = {}; // Update member (in group) role if necessary
         if (data.role == "super") {mbrChg = await db.collection("member").updateMany({userID: user._id.toString()}, {$set: {role: data.role}});}
         else {mbrChg.acknowledged = true;}
         

@@ -14,19 +14,9 @@ export class GroupChannelDataService {
 
   getGroup(id: string) {return this.http.post<any>("http://localhost:3000/getItem", {collection: "group", _id: id});}
 
-  getChannel(id: string) {return this.http.post<any>("http://localhost:3000/getItem", {collection: "channel", _id: id});}
-
-  getChannelMembers(id: string) {return this.http.post<any>("http://localhost:3000/getList", {collection: "member", data: {channelID: id}});}
-
   getChannelData(id: string) {return this.http.post<any>("http://localhost:3000/getChannelData", {id: id});}
 
   getGroupMembers(id: string) {return this.http.post<any>("http://localhost:3000/getList", {collection: "member", data: {groupID: id}});}
-
-  getSuper() {return this.http.post<any>("http://localhost:3000/getList", {collection: "user", data: {superOrAdmin: 'super'}});}
-
-  getAdmin(id: string) {return this.http.post<any>("http://localhost:3000/getList", {collection: "member", data: {groupID: id, role: "admin"}});}
-
-  getAssis(id: string) {return this.http.post<any>("http://localhost:3000/getList", {collection: "member", data: {groupID: id, role: "assis"}});}
 
   addMemberToChannel(data: any) {return this.http.post<any>("http://localhost:3000/addMember", data);}
 
@@ -37,17 +27,5 @@ export class GroupChannelDataService {
   deleteFromGroup(userID: string, groupID: string) {return this.http.post<any>("http://localhost:3000/deleteMany", {collection: "member", data: {userID: userID, groupID: groupID}});}
 
   deleteFromChannel(userID: string, channelID: string) {return this.http.post<any>("http://localhost:3000/deleteMany", {collection: "member", data: {userID: userID, channelID: channelID}});}
-
-  deleteMembers(type: string, id: string) {
-    let data: any = {};
-    if (type == "group") {data = {groupID: id};}
-    else if (type == "channel") {data = {channelID: id};}
-
-    return this.http.post<any>("http://localhost:3000/deleteMany", {collection: "member", data: data});
-  }
-
-
-
-
 
 }

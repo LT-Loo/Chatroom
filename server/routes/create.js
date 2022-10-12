@@ -1,25 +1,8 @@
 /* Route to add new item into database */
 
 module.exports = function(db, app, ObjectID) {
-    // app.post("/create", async function (req, res) {
 
-    //     if (!req.body) {return res.sendStatus(400);}
-
-    //     let data = req.body;
-    //     const collection = db.collection(data.collection);
-
-    //     let result = await collection.insertOne(data.data);
-    //     let msg = `Item added successfully into ${data.collection}.`;
-    //     console.log(msg);
-
-    //     if (result.acknowledged) {
-    //         let item = await collection.findOne({"_id": result.insertedId});
-    //         console.log("item: ", item);
-    //         return res.send({success: true, item: item});
-    //     }
-    //     else {return res.send({success: false});}
-    // });
-
+    // Add new group
     app.post("/newGroup", async function(req, res) {
 
         if (!req.body) {return res.sendStatus(400);}
@@ -27,26 +10,26 @@ module.exports = function(db, app, ObjectID) {
         let data = req.body;
         console.log(data);
 
+        // Insert group data 
         let newGroup = await db.collection("group").insertOne({name: data.name, dateTime: data.dateTime});
         if (newGroup.acknowledged) {
-            console.log("group added");
+
             let admins = await db.collection("user").find({superOrAdmin: "super"}).toArray();
             if (data.creator.superOrAdmin == "admin") {admins.push(data.creator);}
 
-            for (let channel of data.channelList) {
+            for (let channel of data.channelList) { // Insert new channels 
                 let channelData = {
                     name: channel,
                     groupID: newGroup.insertedId.toString(),
                     dateTime: data.dateTime
                 };
 
-                console.log("add channel");
                 let newChannel = await db.collection("channel").insertOne(channelData);
 
                 let chatData = {groupID: newGroup.insertedId.toString(), channelID: newChannel.insertedId.toString(), history: []};
                 await db.collection("chat").insertOne(chatData);
 
-                for (let admin of admins) {
+                for (let admin of admins) { // Insert members (Super and Group Admin)
                     let memberData = {
                         userID: admin._id.toString(),
                         username: admin.username,
@@ -56,7 +39,6 @@ module.exports = function(db, app, ObjectID) {
                         channelName: channel,
                         role: admin.superOrAdmin
                     };
-                    console.log("add memebr");
                     await db.collection("member").insertOne(memberData);
                 }
             }
@@ -68,6 +50,7 @@ module.exports = function(db, app, ObjectID) {
         }
     });
 
+    // Insert new channel
     app.post("/newChannel", async function(req, res) {
 
         if (!req.body) {return res.sendStatus(400);}
@@ -75,21 +58,23 @@ module.exports = function(db, app, ObjectID) {
         let data = req.body;
         console.log(data);
 
+        // Get group channel belongs to
         let group = await db.collection("group").findOne({_id: new ObjectID(data.groupID)});
         if (!group) {res.send({success: false, error: "No group found."});}
 
+        // Insert new channel
         let newChannel = await db.collection("channel").insertOne({name: data.name, groupID: data.groupID, dateTime: data.dateTime});
 
+        // Create and insert empty chat history
         let chatData = {groupID: data.groupID, channelID: newChannel.insertedId.toString(), history: []};
         await db.collection("chat").insertOne(chatData);
 
         if (newChannel.acknowledged) {
-            console.log("channel added");
+
             let admins = await db.collection("member").find({$and :[{groupID: data.groupID}, {$or: [{role: "super"}, {role: "admin"}, {role: "assis"}]}]}).toArray();
-            // if (data.creator.superOrAdmin == "admin") {admins.push(data.creator);}
-            console.log(admins);
+
             let members = [];
-            for (let admin of admins) {
+            for (let admin of admins) { // Insert Super and Group Admin
                 if (!members.includes(admin.username)) {
                     let memberData = {
                         userID: admin.userID,
@@ -100,20 +85,15 @@ module.exports = function(db, app, ObjectID) {
                         channelName: data.name,
                         role: admin.role
                     }
-
                     console.log("add admin");
                     await db.collection("member").insertOne(memberData);
                     members.push(admin.username);
-
-                };
-
-                
+                }; 
             }
 
-            for (let member of data.memberList) {
+            for (let member of data.memberList) { // Insert member
                 if (!members.includes(member)) {
                     let mbrData = await db.collection("user").findOne({username: member});
-                    console.log("newmember: ", mbrData);
                     let memberData = {
                         userID: mbrData._id.toString(),
                         username: mbrData.username,
@@ -137,6 +117,7 @@ module.exports = function(db, app, ObjectID) {
         }
     });
 
+    // Add member to existing channel
     app.post("/addMember", async function(req, res) {
 
         if (!req.body) {return res.sendStatus(400);}
@@ -144,11 +125,12 @@ module.exports = function(db, app, ObjectID) {
         let data = req.body;
         console.log(data);
 
+        // Get required data
         let channel = await db.collection("channel").findOne({_id: new ObjectID(data.channelID)});
         let group = await db.collection("group").findOne({_id: new ObjectID(data.groupID)});
         let members = await db.collection("member").find({channelID: data.channelID}).toArray();
 
-        for (let newMember of data.memberList) {
+        for (let newMember of data.memberList) { // Insert member 
             if (!members.find(x => x.username == newMember)) {
                 let mbr = await db.collection("user").findOne({username: newMember});
                 if (!mbr) {res.send({success: false, error: "User not found."});}

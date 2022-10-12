@@ -1,5 +1,6 @@
-<!-- Group Details Modal -->
+<!-- Modal -->
 
+<!-- Header -->
 <div class = "modal-header py-2">
     <h5 *ngIf = "modal == 'details';" class = "modal-title">{{ group.name }}</h5>
     <h5 *ngIf = "modal == 'newChannel';" class = "modal-title">Create New Channel</h5>
@@ -10,7 +11,9 @@
     <button type = "button" class = "btn-close" (click) = "closeModal('close')"></button>
 </div>
 
+<!-- Body -->
 <div class = "modal-body pt-2 pb-1">
+    <!-- Group Details Modal -->
     <div *ngIf = "modal == 'details';">
         <div class = "row align-items-center">
             <div class = "col text-secondary">Group created on {{ group.dateTime | date }}</div>
@@ -18,9 +21,9 @@
                 <button *ngIf = "user.role == 'super' || user.role == 'admin'" type = "button" class = "btn btn-danger py-1 px-0 rounded me-2" (click) = "deleteItem('Group')">Delete Group</button>
                 <button *ngIf = "user.role != 'member'" type = "button" class = "btn btn-primary py-1 px-0 rounded" (click) = "addMember()">Add Member</button>
             </div>
-            
         </div>
         <hr class = "mb-0 mt-2">
+        <!-- Channel List -->
         <div class = "row row-cols-3 row-cols-lg-5 py-3 mb-0">
             <div *ngFor = "let channel of fromParent.channels" class = "col-lg text-center mb-3">
                 <p *ngIf = "select == channel.channelID; else option2" class = "selectChannel border border-secondary rounded-pill px-3 py-1 mb-0 bg-secondary">{{ channel.channelName }}</p>
@@ -31,7 +34,9 @@
         </div>
     </div>
 
+    <!-- Settings Modal -->
     <div *ngIf = "modal == 'settings';">
+        <!-- Change Profile Picture -->
         <div class = "row mb-3">
             <h5>Change Profile Picture</h5>
             <div class = "col-3">
@@ -50,7 +55,10 @@
                 </div>   
             </div>
         </div>
+
         <hr>
+
+        <!-- Change Password -->
         <div class = "row mb-3">
             <h5>Change Password</h5>
             <p *ngIf = "settings.blank" class = "fs-6 fw-light text-danger mb-0 pb-0">* Please fill in both fields.</p>
@@ -73,8 +81,10 @@
         </div>
     </div>
 
+    <!-- Add Member to Channel Modal -->
     <div *ngIf = "modal == 'addMember';" class = "container mt-2">
         <div class = "row mb-3">
+            <!-- Username -->
             <label class = "col-2 col-lg-1 col-form-label">Userame</label>
             <div class = "col-8">
                 <input type = "text" class = "form-control" placeholder = "Add a User" [(ngModel)] = "addToChannel.member">
@@ -90,8 +100,10 @@
         </div>
     </div>
 
+    <!-- New Channel Modal -->
     <div *ngIf = "modal == 'newChannel';" class = "container mt-2">
         <div class = "row mb-3">
+            <!-- Name -->
             <label class = "col-2 col-lg-1 col-form-label me-2">Name</label>
             <div class = "col-8">
                 <input type = "text" class = "form-control" placeholder = "Channel Name" [(ngModel)] = "newChannel.name">
@@ -99,6 +111,8 @@
                 <p *ngIf = "newChannel.channelEmpty" class = "fs-6 fw-light text-danger mb-0 pb-0">* Channel name required.</p>
             </div> 
         </div>
+
+        <!-- Add Member -->
         <div class = "row mb-3">
             <label class = "col-2 col-lg-1 col-form-label me-2">Member</label>
             <div class = "col-8">
@@ -110,6 +124,7 @@
                 <button type = "button" class = "btn btn-outline-primary" (click) = "newChannelAddMember()">Add</button>
             </div>
         </div>
+        <!-- Member List -->
         <div class = "row mb-3">
             <div class = "col offset-2 offset-lg-1 ps-2">
                 <ul>
@@ -119,14 +134,16 @@
         </div>
     </div>
 
+    <!-- New Group Modal -->
     <div *ngIf = "modal == 'newGroup';">
         <div class = "row mb-3">
+            <!-- Group Name -->
             <label class = "col-2 col-lg-1 col-form-label me-2">Name</label>
             <div class = "col-8">
                 <input type = "text" class = "form-control" placeholder = "Group Name" [(ngModel)] = "newGroup.name">
-                <!-- <p *ngIf = "newGroup.invalidGroup" class = "fs-6 fw-light text-danger mb-0 pb-0">* Group already exists.</p> -->
             </div> 
         </div>
+        <!-- Add New Channel -->
         <div class = "row mb-3">
             <label class = "col-2 col-lg-1 col-form-label me-2">Channel</label>
             <div class = "col-8">
@@ -138,6 +155,7 @@
                 <button type = "button" class = "btn btn-outline-primary" (click) = "newGroupAddChannel()">Add</button>
             </div>
         </div>
+        <!-- Channel List -->
         <div class = "row mb-3">
             <div class = "col offset-2 offset-lg-1 ps-2">
                 <ul>
@@ -147,8 +165,10 @@
         </div>
     </div>
 
+    <!-- Admin Modal -->
     <div *ngIf = "modal == 'admin';">
         <div class = "accordion mb-1" id = "adminWork">
+            <!-- Create New User -->
             <div class = "accordion-item">
                 <h2 class = "accordion-header">
                     <button class = "accordion-button py-2" type = "button" data-bs-toggle = "collapse" data-bs-target = "#createUser">
@@ -178,6 +198,8 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Create Group -->
             <div class = "accordion-item">
                 <h2 class = "accordion-header">
                     <button class = "accordion-button py-2" type = "button" data-bs-toggle = "collapse" data-bs-target = "#createGroup">
@@ -213,6 +235,8 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Change User Role -->
             <div *ngIf = "user.superOrAdmin == 'super'" class = "accordion-item">
                 <h2 class = "accordion-header">
                     <button class = "accordion-button py-2" type = "button" data-bs-toggle = "collapse" data-bs-target = "#upgradeUser">
@@ -251,8 +275,8 @@
     </div>
 </div>
 
+<!-- Footer: Buttons based on type of modal -->
 <div *ngIf = "modal == 'details';" class = "modal-footer py-2 justify-content-between">
-    <!-- If Group Admin/Group Assis-->
     <button *ngIf = "user.role != 'member'" type = "button" class = "btn btn-secondary py-1" (click) = "createChannel()">Create Channel</button>
     <div>
         <button *ngIf = "user.role == 'super' || user.role == 'admin'" type = "button" class = "btn btn-danger py-1" (click) = "deleteItem('Channel')">Delete Channel</button>

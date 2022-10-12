@@ -30,54 +30,37 @@ export class ChatDataService {
   }
 
   // Request to leave channel
-  leave() {
-    this.socket.emit("leave", {});
-    // this.socket.disconnect();
-  }
+  leave() {this.socket.emit("leave", {});}
 
   // Request to switch channel
   switch(channelID: string) {this.socket.emit("switch", channelID);}
 
   // Send message
-  send(chat: any) {
-    this.socket.emit("message", chat);
-    // call http to save message
-  }
+  send(chat: any) {this.socket.emit("message", chat);}
 
-  // Respone for join request
+  // Receive join request's respone
   getJoin() {
     return new Observable<any>(observer => {
       this.socket.on("join", (data: any) => {
-        observer.next(data); // get channel data and navigate to channel
+        observer.next(data); 
       });
     });
   }
 
-  // Respone for leave request
+  // Receive leave request's response
   getLeave() {
     return new Observable<any>(observer => {
       this.socket.on("leave", (data: any) => {
-        observer.next(data); // Leave channel
+        observer.next(data);
       });
     });
   }
 
-  // Respone for switch request
+  // Receive switch request's response
   getSwitch() {
     return new Observable<any>(observer => {
       this.socket.on("switch", (data: any) => {
         observer.next(data);
-        // Get chat history from database and reload page to switch
-      });
-    });
-  }
-
-  // Get notice if someone joined/left channel
-  getNotice() {
-    return new Observable<any>(observer => {
-      this.socket.on("notice", (data: any) => {
-        observer.next(data);
-        // Get chat data from database and push to message variable
       });
     });
   }
@@ -87,19 +70,7 @@ export class ChatDataService {
     return new Observable<any>(observer => {
       this.socket.on("message", (data: any) => {
         observer.next(data);
-        // Get chat data from server and push to message variable
-        // no need get from database again
       });
-    });
-  }
-
-  // Listen for changes happen within channel
-  getChange() {
-    return new Observable<any>(observer => {
-      this.socket.on("change", (data: string) => {
-        observer.next(data);
-        // Avoid reloading just get necessary data from database
-      })
     });
   }
 

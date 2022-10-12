@@ -5,7 +5,6 @@ module.exports = function(db, app, ObjectID) {
 
         if (!req.body) {return res.sendStatus(400);}
 
-        // let data = req.body;
         let userID = new ObjectID(req.body);
 
         const collection = db.collection("user");

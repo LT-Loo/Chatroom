@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
-import { v4 as uuid4 } from 'uuid';
 
 import { UserDataService } from '../services/user-data.service';
 import { GroupChannelDataService } from '../services/group-channel-data.service';
@@ -92,12 +91,14 @@ export class GroupDetailsComponent implements OnInit {
     private chatService: ChatDataService) { }
 
   ngOnInit(): void {
+    // Retrieve data sent from parent
     this.modal = this.fromParent.modal;
     this.user = this.fromParent.user;
     this.groupID = this.fromParent.groupID;
     this.channels = this.fromParent.channels;
     this.user.role = this.user.superOrAdmin;
-    // this.members = this.fromParent.members;
+
+    // Get group data (For Group Details Modal)
     this.groupService.getGroup(this.fromParent.groupID).subscribe((res) => {
       if (res.success) {
         this.group = res.itemData;
@@ -106,73 +107,58 @@ export class GroupDetailsComponent implements OnInit {
           if (res.success) {this.members = res.list;}
         });
       }
-      // console.log(res);
     });
 
-    this.getUserList();
-    console.log("userList", this.userList);
-    // console.log("prnt:", this.fromParent);
+    this.getUserList(); // Get list of users based on role
+
   }
 
-  // ngOnChanges(): void {
-  //   console.log("run");
-  //   this.userService.getUserChannels(this.user._id, this.groupID).subscribe(res => {
-  //     this.channels = res.list;
-  //   });
-  // }
-
+  // Close modal
   closeModal(sendData: any = null) {
     this.activeModal.close(sendData);
   }
 
-  createChannel() {
-    this.modal = "newChannel";
-  }
+  createChannel() {this.modal = "newChannel";} // Change modal to New Channel Modal
 
-  createGroup() {this.modal = "newGroup";}
+  createGroup() {this.modal = "newGroup";} // Change modal to New Group Modal
 
+  // Add user to member list
   addMember() {
     console.log(this.groupID);
     if (this.select != "") {this.modal = "addMember";}
   }
 
+  // Switch modal or close modal
   back() {
     this.select = "";
     if(this.modal == "newChannel" || this.modal == "addMember") {this.modal = "details";}
     else {this.activeModal.close();}
   }
 
+  // Select channel
   selectChannel(channel: string) {
     this.select = channel;
     this.selectChn = this.channels.find((x: any) => x.channelID == this.select);
   }
 
+  // Join selected channel
   joinChannel() {
     if (this.select == "") {this.select = this.channels[0].channelID;}
     let url = "channel/" + this.group._id + "/" + this.select;
-    this.chatService.initSocket();
-    this.chatService.join(this.user.username, this.select);
-    this.ioConnection = this.chatService.getJoin().subscribe(res => {
+    this.chatService.initSocket(); // Create and connect socket to server
+    this.chatService.join(this.user.username, this.select); // Send join request
+    this.ioConnection = this.chatService.getJoin().subscribe(res => { // Redirect route if request approved
       if (res) {
         this.activeModal.close();
-        // sessionStorage.setItem("currentChannel", this.select);
         this.router.navigateByUrl(url);
       }
-    });
-    // this.activeModal.close();
-    // // sessionStorage.setItem("reload", "0");
-    // this.router.navigateByUrl(url);
-    
+    });   
   }
 
+  // Create new user (For Admin Modal)
   createUser() {
-    // let usrList: any = localStorage.getItem("Users");
-    // usrList = JSON.parse(usrList);
 
-    // this.newUser.nameEmpty = false;
-    // this.newUser.emailEmpty = false;
-    // this.newUser.validUser = true;
-
+    // Input validation
     if (this.newUser.username == "") {this.newUser.nameEmpty = true;}
     else {this.newUser.nameEmpty = false;}
 
@@ -181,13 +167,13 @@ export class GroupDetailsComponent implements OnInit {
 
     if (this.newUser.emailEmpty || this.newUser.userEmpty) {return;}
 
-    this.userService.getAllUsers().subscribe(res => {
+    this.userService.getAllUsers().subscribe(res => { // Get all users in database
       if (res.success) {
         let allUsers = res.items;
-        if(allUsers.find((x: any) => x.username == this.newUser.username)) {
+        if(allUsers.find((x: any) => x.username == this.newUser.username)) { // Check duplicate username
           this.newUser.validUser = false;
           return;
-        } else {
+        } else { // If user valid, create user
           this.newUser.validUser = true;
           let newUserData = {
             username: this.newUser.username,
@@ -195,7 +181,7 @@ export class GroupDetailsComponent implements OnInit {
             lastActive: new Date().toLocaleString(),
             superOrAdmin: "none"
           }
-          this.userService.register(newUserData).subscribe(res => {
+          this.userService.register(newUserData).subscribe(res => { // Send data to server
             if (res.success) {
               this.newUser.username = "";
               this.newUser.email = "";
@@ -215,35 +201,12 @@ export class GroupDetailsComponent implements OnInit {
         }
       }
     });
-
-    
-    // if (usrList.map((x: any) => x.username).includes(this.newUser.username)) {
-    //   this.newUser.validUser = false;
-    //   // this.newUser.username = "";
-    // } else {
-    //   let user = {
-    //     id: uuid4(),
-    //     username: this.newUser.username,
-    //     email: this.newUser.email,
-    //     role: this.newUser.role,
-    //     lastActive: new Date().toUTCString()
-    //   }
-    //   console.log(user);
-    //   usrList.push(user);
-    //   localStorage.setItem("Users", JSON.stringify(usrList));
-      
-    //   this.newUser.username = "";
-    //   this.newUser.email = "";
-    //   this.newUser.role = "";  
-    //   this.newUser.validUser = true;
-    // }
-    // this.newUser.empty = false; 
   }
 
+  // Change/Upgrade user role
   chgUserRole() {
-    // let usrList: any = localStorage.getItem("Users");
-    // usrList = JSON.parse(usrList);
 
+    // Input validation
     if (this.chgRole.username == "") {this.chgRole.userEmpty = true;}
     else {this.chgRole.userEmpty = false;}
 
@@ -255,39 +218,29 @@ export class GroupDetailsComponent implements OnInit {
       return;
     }
 
-    console.log(this.userList);
+    // Check if user exists
     if (!this.userList.find((x: any) => x.username == this.chgRole.username) || this.user.username == this.chgRole.username) {
       this.chgRole.validUser = false;
-      
-      // return
-    } else {
+    } else { // Is user exists
       this.chgRole.validUser = true;
       let change = {
         username: this.chgRole.username,
         role: this.chgRole.role
       }
-      console.log(change);
-      this.userService.upgradeUser(change).subscribe(res => {
+      this.userService.upgradeUser(change).subscribe(res => { // Send data to server
         this.closeModal();
       })
-      // if (this.chgRole.username) {
-      //   let index = usrList.findIndex((x: any) => {
-      //     return x.username == this.chgRole.username;
-      //   });
-      //   usrList[index].role = this.chgRole.role;
-      //   localStorage.setItem("Users", JSON.stringify(usrList));
-
-      //   this.chgRole.username = "";
-      //   this.activeModal.close();
-      // }
     }
   }
 
+  // Add channel to new group (For New Group Modal)
   newGroupAddChannel() {
 
+    // Input validation
     if (!this.newGroup.channel) {this.newGroup.channelEmpty = true;}
+    // Check duplicate channel name in group
     else if (!this.newGroup.channelList.includes(this.newGroup.channel.toLowerCase())) {
-      this.newGroup.channelList.push(this.newGroup.channel);
+      this.newGroup.channelList.push(this.newGroup.channel); // Add channel if valid
       this.newGroup.channel = "";
       this.newGroup.channelEmpty = false;
       this.newGroup.invalidChannel = false;
@@ -295,64 +248,29 @@ export class GroupDetailsComponent implements OnInit {
     else {this.newGroup.invalidChannel = true;}
   }
 
-  getUserList(type: string = "") {
-    // let userList: any = [];
-    // let list: any = [];
-    // if (this.user.role == "Group Assis") {
-    //   if (type == "newChannel") {
-    //     list = this.members.filter((x: any) => x.group == this.group.id);
-    //   } else {
-    //     list = this.members.filter((x: any) => x.group == this.group.id && x.channel != this.select);
-    //   }
-    //   for (let ls of list) {
-    //     for (let mbr of ls.members) {
-    //       if (!userList.find((x: any) => mbr.username == x.username)) {userList.push(mbr)};
-    //     }
-    //   }
-    // } else {
-    //   userList = localStorage.getItem("Users");
-    //   userList = JSON.parse(userList); 
-    //   if (type != "newChannel") {
-    //     let rmList = this.members.filter((x: any) => x.group == this.group.id && x.channel == this.select);
-    //     for (let rm of rmList) {
-    //       for (let mbr of rm.members) {
-    //         userList = userList.filter((x: any) => x.username != mbr.username);
-    //       }
-    //     }
-    //   }
-    // }
+  // Get list of users based on role
+  getUserList() {
 
-    // userList = userList.map((x: any) => x.username);
-
-    // console.log("userList", userList);
-
-    // return userList;
-
-    // let userList: any = [];
-
-    if (this.user.role == "assis") {
+    if (this.user.role == "assis") { // Group Assis - Get group members
       this.groupService.getGroupMembers(this.groupID).subscribe(res => {
         if (res.success) {this.userList = res.list;}
       });
-    } else if (this.user.role == "super" || this.user.role == "admin") {
+    } else if (this.user.role == "super" || this.user.role == "admin") { // Super or Group Admin - Get all users
       this.userService.getAllUsers().subscribe(res => {
         if (res.success) {this.userList = res.items;}
         console.log("in subscribe", this.userList);
       });
     }
-
-    console.log("outside subscribe", this.userList);
-
-    // return userList;
   }
 
+  // Add member to new channel
   async newChannelAddMember() {
-    // let userList = this.getUserList("newChannel");
-    // await this.getUserList();
-    console.log("infunrtion", this.userList);
+
+    // Input validation
     if (this.newChannel.member == "") {this.newChannel.memberEmpty = true; return;}
     else {this.newChannel.memberEmpty = false;}
 
+    // Add member to list if user valid
     if (!this.newChannel.memberList.includes(this.newChannel.member)
         && this.userList.find((x: any) => x.username == this.newChannel.member)) {
       this.newChannel.memberList.push(this.newChannel.member);
@@ -362,14 +280,16 @@ export class GroupDetailsComponent implements OnInit {
     else {this.newChannel.invalidMember = true;}
   }
 
+  // Add member to existing channel
   addMemberToChannel() {
-    // let userList: any = this.getUserList();
 
+    // Input validation
     if (this.addToChannel.member == "") {
       this.addToChannel.memberEmpty = true;
       return;
     } else {this.addToChannel.memberEmpty = false;}
 
+    // Add member to list if user exist
     if (!this.addToChannel.memberList.includes(this.addToChannel.member)
         && this.userList.find((x: any) => x.username == this.addToChannel.member)) {
       this.addToChannel.memberList.push(this.addToChannel.member);
@@ -377,23 +297,14 @@ export class GroupDetailsComponent implements OnInit {
       this.addToChannel.invalidMember = false;
     }
     else {this.addToChannel.invalidMember = true;}
-    // console.log(this.addToChannel.memberList);
   }
 
+  // Create group / channel or add member
   async createItem(modal: string = "") {
-    let saveChange = true;
-    let close = true;
-    let grpList: any = localStorage.getItem("Groups");
-    grpList = JSON.parse(grpList);
-    let chnList: any = localStorage.getItem("Channels");
-    chnList = JSON.parse(chnList);
-    let mbrList: any = localStorage.getItem("Members");
-    mbrList = JSON.parse(mbrList);
-    let usrList: any = localStorage.getItem("Users");
-    usrList = JSON.parse(usrList);
 
     if (modal == "") {modal = this.modal;}
 
+    // Create new Group
     if (modal == "newGroup") {
 
       let groupData = {
@@ -403,38 +314,24 @@ export class GroupDetailsComponent implements OnInit {
         creator: this.user
       };
 
-      let newGroup: any = {};
       this.groupService.newGroup(groupData).subscribe((res) => {
         if (res.success) {this.closeModal();}
       });  
     }
 
+    // Create new channel
     if (modal == "newChannel") {
-      // console.log((chnList.map((x: any) => x.name)));
-      // await this.getUserList();
+      
+      // Input validation
       if (this.newChannel.name == "") {this.newChannel.channelEmpty = true; return;}
       else {this.newChannel.channelEmpty = false;}
 
+      // Check for duplicate channel name in group
       if (this.channels.find(x => x.channelName == this.newChannel.name)) {
         this.newChannel.invalidChannel = true;
-        // this.newChannel.name = "";
         return;
-      } else {
+      } else { // If channel name valid, send data to server to be stored
         this.newChannel.invalidChannel = false;
-        saveChange = true;
-        // close = false;
-        // let chn: any = {
-        //   id: uuid4(),
-        //   groupID: this.group.id,
-        //   name: this.newChannel.name,
-        //   date: new Date().toUTCString()
-        // }
-        // let chnMbr: any = {
-        //   channel: chn.id,
-        //   group: this.group.id,
-        //   members: []
-        // }
-        // let members = [];
         let channelData = {
           name: this.newChannel.name,
           groupID: this.groupID,
@@ -446,22 +343,16 @@ export class GroupDetailsComponent implements OnInit {
           if (res.success) {
             this.userService.getUserChannels(this.user._id.toString(), this.groupID).subscribe(res => {
               if (res.success) {
-                this.fromParent.channels = res.list;
-                // console.log(this.fromParent.channels);
+                this.fromParent.channels = res.list; // Update channel list
                 this.back();
               }
             });
           }
         });
-
-        // chnMbr.members.push(usrList.find((x: any) => x.username == this.user.username || x.role == "Super Admin"));
-        // for (let mbr of this.newChannel.memberList) {
-        //   chnMbr.members.push(usrList.find((x: any) => x.username == mbr && x.username != this.user.username));
-        // }
-        // chnList.push(chn);
-        // mbrList.push(chnMbr);
       }
     }
+
+    // Add member to channel
     if (modal == "addMember") {
       if (this.addToChannel.memberList) {
         let data = {
@@ -470,98 +361,64 @@ export class GroupDetailsComponent implements OnInit {
           memberList: this.addToChannel.memberList
         };
 
-        // console.log(data);
         this.groupService.addMemberToChannel(data).subscribe(res => {
           if (res.success) {this.back();}
-          this.addToChannel = {
+          this.addToChannel = { // Reset form
             member: "",
             memberList: [],
             invalidMember: false,
             memberEmpty: false
           }
         });
-        // let index = mbrList.findIndex((x: any) => {
-        //   return x.group == this.group.id && x.channel == this.select;
-        // });
-        // for (let usr of this.addToChannel.memberList) {
-        //   mbrList[index].members.push(usrList.find((x: any) => x.username == usr));
-        // }
       }
-      // close = false;
     }
-
-    if (saveChange) {
-      localStorage.setItem("Groups", JSON.stringify(grpList));
-      localStorage.setItem("Channels", JSON.stringify(chnList));
-      localStorage.setItem("Members", JSON.stringify(mbrList));
-    } 
-
-    // if (close) {this.closeModal();}
-    // else {this.back();}
-    
   }
 
+  // Delete group or channel
   deleteItem(item: string) {
-    // let grpList: any = localStorage.getItem("Groups");
-    // grpList = JSON.parse(grpList);
-    // let chnList: any = localStorage.getItem("Channels");
-    // chnList = JSON.parse(chnList);
-    // let mbrList: any = localStorage.getItem("Members");
-    // mbrList = JSON.parse(mbrList);
 
-    if (item == "Group") {
+    if (item == "Group") { // Delete group
       this.groupService.deleteGroup(this.groupID).subscribe(res => {
         if (res.success) {this.closeModal();}
       });
-      // mbrList = mbrList.filter((x: any) => x.group != this.group.id);
-      // chnList = chnList.filter((x: any) => x.groupID != this.group.id);
-      // grpList = grpList.filter((x: any) => x.id != this.group.id);
     }
-    else if (item == "Channel") {
+    else if (item == "Channel") { // Delete channel
       this.groupService.deleteChannel(this.select).subscribe(res => {
         if (res.success) {
           this.userService.getUserChannels(this.user._id, this.groupID).subscribe(res => {
-            this.fromParent.channels = res.list;
+            this.fromParent.channels = res.list; // Update channel list
           });
         }
       });
-      // mbrList = mbrList.filter((x: any) => x.channel != this.select || x.group != this.group.id);
-      // chnList = chnList.filter((x: any) => x.id != this.select || x.groupID != this.group.id);
-      // this.channels = chnList;
     }
-
-    // localStorage.setItem("Groups", JSON.stringify(grpList));
-    // localStorage.setItem("Channels", JSON.stringify(chnList));
-    // localStorage.setItem("Members", JSON.stringify(mbrList));
-    // this.activeModal.close();
   }
 
+  // Get image file
   onFileSelected(event: any) {
     this.settings.file = event.target.files[0]; 
-    console.log("select file");
-    console.log(this.settings.file);
   }
 
+  // Store image in database
   onUpload() {
     const fd = new FormData();
     fd.append('images', this.settings.file, this.settings.file.name);
 
     this.imageService.imgUpload(fd).subscribe(res => {
       if (res.success) {
-        // let imagepath = res.filename;
         let data = {
           _id: this.user._id,
-          pfp: res.filename
+          pfp: res.filenames[0]
         }
-        this.userService.updateUser(data).subscribe(res => {
+        this.userService.updateUser(data).subscribe(res => { // Update user data
           if (res.success) {this.closeModal();}
         });
       }
-      // console.log("to serverrrr");
     });
   }
 
+  // Change user password
   changePassword() {
+    // Input validation
     if (this.settings.newPwd == "" || this.settings.confirmPwd == "") {
       this.settings.blank = true;
       return;
@@ -570,6 +427,7 @@ export class GroupDetailsComponent implements OnInit {
     if (this.settings.newPwd != this.settings.confirmPwd) {this.settings.match = false; return;}
     else {this.settings.match = true;}
 
+    // If input valid, update user data
     if (confirm("Confirm to change password?")) {
       let data = {
         _id: this.user._id,
@@ -582,8 +440,5 @@ export class GroupDetailsComponent implements OnInit {
         }
       })
     }
-
-
   }
-
 }
