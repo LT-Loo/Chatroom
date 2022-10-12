@@ -47,15 +47,6 @@ export class ChatDataService {
     });
   }
 
-  // Receive leave request's response
-  getLeave() {
-    return new Observable<any>(observer => {
-      this.socket.on("leave", (data: any) => {
-        observer.next(data);
-      });
-    });
-  }
-
   // Receive switch request's response
   getSwitch() {
     return new Observable<any>(observer => {
