@@ -39,6 +39,11 @@
                                     <h6 class = "d-inline-block mb-0">{{ chat.username }}</h6>
                                     <p class = "msg-date d-inline-block ps-2 mb-0" style = "font-size: 12px;">{{ chat.dateTime }}</p>
                                     <p class = "mb-1 ">{{ chat.message }}</p>
+                                    <div *ngIf = "chat.images != null" class = "row row-cols-4">
+                                        <div *ngFor = "let img of chat.images" class = "col">
+                                            <img src = "http://localhost:3000/images/{{ img }}" class = "img-fluid">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

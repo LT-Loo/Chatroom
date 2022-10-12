@@ -10,7 +10,7 @@ const isFileValid = (file) => {
 
 module.exports = function(db, app, formidable, fs, path, ObjectID) {
 
-    const saveFile = (file) => {
+    const saveFile = (file, form) => {
         const isValid = isFileValid(file); // File validation
 
         // Generate valid file name (Replace spaces with dashes)
@@ -20,7 +20,7 @@ module.exports = function(db, app, formidable, fs, path, ObjectID) {
 
         if (!isValid) {
             return res.status(400).json({
-                statud: "Fail",
+                status: "Fail",
                 message: "Invalid file type"
             });
         }
@@ -41,7 +41,7 @@ module.exports = function(db, app, formidable, fs, path, ObjectID) {
                 });
             }  
         });
-
+        console.log(file.newFilename);
         return file.newFilename;
 
     }
@@ -148,7 +148,7 @@ module.exports = function(db, app, formidable, fs, path, ObjectID) {
             if (!files.images.length) { // Single File
                 // console.log("single file upload");
                 // const file = files.images; // Retrieve file
-                filenames.push(saveFile(files.images));
+                filenames.push(saveFile(files.images, form));
                 // console.log(myFile);
                 // const isValid = isFileValid(file); // File validation
 
@@ -190,7 +190,7 @@ module.exports = function(db, app, formidable, fs, path, ObjectID) {
                 let i = 0;
                 // let filenames = [];
                 for (let file of files.images) {
-                    filenames.push(saveFile(file));
+                    filenames.push(saveFile(file, form));
                     // const isValid = isFileValid(file); // File validation
 
                     // // Generate valid file name (Replace spaces with dashes)
@@ -223,9 +223,13 @@ module.exports = function(db, app, formidable, fs, path, ObjectID) {
                     // });
                     // filenames.push(file.newFilename);
                 }
+                console.log("after for", filenames);
                 
             }
+            console.log("after if", filenames);
+            res.send({success: true, filenames: filenames});
         });
-        res.send({success: true, filenames: filenames});
+        // console.log("before send", filenames);
+        
     });
 }

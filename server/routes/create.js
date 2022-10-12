@@ -1,24 +1,24 @@
 /* Route to add new item into database */
 
 module.exports = function(db, app, ObjectID) {
-    app.post("/create", async function (req, res) {
+    // app.post("/create", async function (req, res) {
 
-        if (!req.body) {return res.sendStatus(400);}
+    //     if (!req.body) {return res.sendStatus(400);}
 
-        let data = req.body;
-        const collection = db.collection(data.collection);
+    //     let data = req.body;
+    //     const collection = db.collection(data.collection);
 
-        let result = await collection.insertOne(data.data);
-        let msg = `Item added successfully into ${data.collection}.`;
-        console.log(msg);
+    //     let result = await collection.insertOne(data.data);
+    //     let msg = `Item added successfully into ${data.collection}.`;
+    //     console.log(msg);
 
-        if (result.acknowledged) {
-            let item = await collection.findOne({"_id": result.insertedId});
-            console.log("item: ", item);
-            return res.send({success: true, item: item});
-        }
-        else {return res.send({success: false});}
-    });
+    //     if (result.acknowledged) {
+    //         let item = await collection.findOne({"_id": result.insertedId});
+    //         console.log("item: ", item);
+    //         return res.send({success: true, item: item});
+    //     }
+    //     else {return res.send({success: false});}
+    // });
 
     app.post("/newGroup", async function(req, res) {
 
@@ -76,6 +76,7 @@ module.exports = function(db, app, ObjectID) {
         console.log(data);
 
         let group = await db.collection("group").findOne({_id: new ObjectID(data.groupID)});
+        if (!group) {res.send({success: false, error: "No group found."});}
 
         let newChannel = await db.collection("channel").insertOne({name: data.name, groupID: data.groupID, dateTime: data.dateTime});
 
@@ -144,18 +145,19 @@ module.exports = function(db, app, ObjectID) {
         console.log(data);
 
         let channel = await db.collection("channel").findOne({_id: new ObjectID(data.channelID)});
-        let group = await db.collection("group").findOne({_id: new ObjectID(channel.groupID)});
+        let group = await db.collection("group").findOne({_id: new ObjectID(data.groupID)});
         let members = await db.collection("member").find({channelID: data.channelID}).toArray();
 
         for (let newMember of data.memberList) {
             if (!members.find(x => x.username == newMember)) {
                 let mbr = await db.collection("user").findOne({username: newMember});
+                if (!mbr) {res.send({success: false, error: "User not found."});}
                 let memberData = {
                     userID: mbr._id.toString(),
                     username: mbr.username,
-                    groupID: group._id.toString(),
+                    groupID: data.groupID,
                     groupname: group.name,
-                    channelID: channel._id.toString(),
+                    channelID: data.channelID,
                     channelName: channel.name,
                     role: "member"
                 }

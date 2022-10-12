@@ -141,10 +141,12 @@ export class ChannelComponent implements OnInit {
   // }
 
   leave() {
+    this.router.navigateByUrl("account/" + this.user._id);
     this.chatService.leave();
-    this.leaveConnection = this.chatService.getLeave().subscribe(res => {
-      if (res) {this.router.navigateByUrl("account/" + this.user._id);}
-    })
+    // this.leaveConnection = this.chatService.getLeave().subscribe(res => {
+    //   if (res) {this.router.navigateByUrl("account/" + this.user._id);}
+    // })
+    
   }
 
   deleteChannel() {

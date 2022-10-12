@@ -9,7 +9,6 @@ module.exports = function(db, app, ObjectID) {
 
         let data = req.body;
         let itemID = new ObjectID(data.data._id);
-        console.log("updatteeeee");
 
         if ("password" in data.data) {data.data.password = await bcrypt.hash(data.data.password, 10);}
 
@@ -33,7 +32,7 @@ module.exports = function(db, app, ObjectID) {
         // let itemID = new ObjectID(data._id);
 
         let user = await db.collection("user").findOne({username: data.username});
-        console.log(user);
+        if (!user) {res.send({success: false});} 
         // const collection = db.collection(data.collection);
         // delete data["username"];
         let userChg = await db.collection("user").updateOne({_id: user._id}, {$set: {superOrAdmin: data.role}});
@@ -42,9 +41,10 @@ module.exports = function(db, app, ObjectID) {
         if (data.role == "super") {mbrChg = await db.collection("member").updateMany({userID: user._id.toString()}, {$set: {role: data.role}});}
         else {mbrChg.acknowledged = true;}
         
+        let updateUser = await db.collection("user").findOne({username: data.username});
         if (userChg.acknowledged && mbrChg.acknowledged) {
             console.log(`Successfully upgrade role for ${data.username}.`);
-            res.send({success: true});
+            res.send({success: true, userData: updateUser});
         } else {
             console.log(`Failed to upgrade role for ${data.username}.`);
             res.send({success: false});
