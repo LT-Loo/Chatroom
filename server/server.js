@@ -9,6 +9,15 @@ var http = require("http").Server(app);
 var cors = require("cors");
 app.use(cors());
 
+// Socket for chat communication
+const io = require("socket.io")(http, {
+    cors: {
+        origin: "http://localhost:4200",
+        methods: ["GET", "POST"]
+    }
+});
+const sockets = require('./socket.js');
+
 // For parsing JSON data
 var bodyParser = require("body-parser");
 app.use(bodyParser.json());
@@ -22,14 +31,6 @@ var objectID = require("mongodb").ObjectId; // For ObjectID functionality
 const formidable = require("formidable");
 const path = require("path");
 var fs = require("fs");
-
-// Socket for chat communication
-const io = require("socket.io")(http, {
-    cors: {
-        origin: "http://localhost:4200",
-        methods: ["GET", "POST"]
-    }
-});
 
 // Point static path to serve Angular app
 app.use(express.static(__dirname + "/../dist/chat-system/"));
@@ -66,7 +67,7 @@ MongoClient.connect(URL, {useNewUrlParser: true, useUnifiedTopology: true}, func
     sockets.connect(io, PORT, db, objectID);
 
     // Start server
-    app.listen(PORT, () => {
+    http.listen(PORT, () => {
         console.log("Server is listening on port: ", PORT);
     });
 

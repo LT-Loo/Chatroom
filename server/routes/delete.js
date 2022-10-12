@@ -31,8 +31,9 @@ module.exports = function(db, app, ObjectID) {
         let grpRes = await db.collection("group").deleteOne({_id: groupID});
         let chnRes = await db.collection("channel").deleteMany({groupID: id});
         let mbrRes = await db.collection("member").deleteMany({groupID: id});
+        let chatRes = await db.collection("chat").deleteMany({groupID: id});
 
-        if (grpRes.acknowledged && chnRes.acknowledged && mbrRes.acknowledged) {
+        if (grpRes.acknowledged && chnRes.acknowledged && mbrRes.acknowledged && chatRes.acknowledged) {
             console.log(`Successfully deleted group ${id}`);
             return await res.send({success: true});
         } else {
@@ -50,6 +51,7 @@ module.exports = function(db, app, ObjectID) {
 
         let chnRes = await db.collection("channel").deleteOne({_id: channelID});
         let mbrRes = await db.collection("member").deleteMany({channelID: id});
+        let chatRes = await db.collection("chat").deleteOne({channelID: id});
 
         if (chnRes.acknowledged && mbrRes.acknowledged) {
             console.log(`Successfully deleted channel ${id}`);

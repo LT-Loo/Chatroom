@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ObjectId } from 'mongodb';
 
 import { UserDataService } from '../services/user-data.service';
 import { GroupChannelDataService } from '../services/group-channel-data.service';
 import { ImageUploadService } from '../services/image-upload.service';
+import { ChatDataService } from '../services/chat-data.service';
 
 @Component({
   selector: 'app-channel',
@@ -17,7 +18,8 @@ export class ChannelComponent implements OnInit {
     private route: ActivatedRoute,
     private userService: UserDataService,
     private groupService: GroupChannelDataService,
-    private imageService: ImageUploadService) { }
+    private imageService: ImageUploadService,
+    private chatService: ChatDataService) { }
 
   groupID: any = "";
   channelID: any = "";
@@ -27,14 +29,25 @@ export class ChannelComponent implements OnInit {
   channel: any = {};
   members: any[] = [];
   group: any = {};
+
+  msgConnection: any;
+  leaveConnection: any;
+  switchConnection: any;
+  joinConnection: any;
+  chatHistory: any[] = [];
+
+  chatbox: any;
   
   chat: any = {
     message: "",
     images: null,
     imageNum: 0,
+    imgFilename: null
   }
 
   ngOnInit(): void {
+
+    console.log("here is channel");
 
     if (sessionStorage.length == 0) {
       this.router.navigateByUrl("");
@@ -50,9 +63,7 @@ export class ChannelComponent implements OnInit {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
     let userID = sessionStorage.getItem("auth");
-    // let chns = localStorage.getItem("Channels");
-    // let grp = localStorage.getItem("Groups");
-    // let mbrs = localStorage.getItem("Members");
+
     if (userID) {
       this.userService.getUserByID(userID).subscribe((res) => {
         if (res.success) {this.user = res.userData;}
@@ -61,9 +72,33 @@ export class ChannelComponent implements OnInit {
             this.channels = res.list;
             this.channel = res.list.find((x: any) => x.channelID == this.channelID);
             this.user.role = this.channel.role;
-            this.groupService.getChannelMembers(this.channelID).subscribe((res) => {
-              if (res.success) {this.members = res.list;}
-              console.log(this.members);
+            this.groupService.getChannelData(this.channelID).subscribe((res) => {
+              if (res.success) {
+                this.members = res.list.members;
+                this.chatHistory = res.list.chat.history;
+
+                // this.chatService.initSocket();
+                // this.chatService.join(this.user.username, this.channelID);
+                // this.joinConnection = this.chatService.getJoin().subscribe(result => {
+                //   if (result) {
+                //     this.chatHistory = result.chatHistory;
+                //     // this.scroll.nativeElement.scrollTop = this.scroll.nativeElement.scrollHeight;
+
+                    
+                //   }
+                // });
+
+                this.msgConnection = this.chatService.getMessage().subscribe(data => {
+                  this.chatHistory.push(data);
+                  // this.scroll.nativeElement.scrollTop = this.scroll.nativeElement.scrollHeight;
+                  // console.log(data);
+                  // console.log(this.chatHistory);
+                });
+
+                
+                // console.log("chat history", this.chatHistory);
+              }
+              // console.log(this.members);
             });
           }
         });
@@ -73,7 +108,14 @@ export class ChannelComponent implements OnInit {
       // this.groups = JSON.parse(grp);
       // this.members = JSON.parse(mbrs);
       // console.log("bfor:", this.members);
+
+      // this.msgConnection = this.chatService.getMessage().subscribe(data => {
+      //   this.chatHistory.push(data);
+      //   console.log(data);
+      //   console.log(this.chatHistory);
+      // });
     }
+
 
     // this.channel = this.channels.find((x: any) => x.id == this.channelID);
     // this.members = this.members.find((x: any) => x.channel == this.channelID && x.group == this.groupID);
@@ -86,8 +128,23 @@ export class ChannelComponent implements OnInit {
     // console.log("mbr:", this.members);
   }
 
+  // ngAfterViewInit() {
+  //   this.chatbox = document.getElementById("chatbox");
+  //   this.chatbox.scrollTop = this.chatbox.scrollHeight;
+  // }
+
+  // join() {
+  //   if (sessionStorage.getItem("reload") == "0") {
+  //     this.chatService.initSocket();
+  //     sessionStorage.setItem("reload", "1");
+  //   } else {}
+  // }
+
   leave() {
-    this.router.navigateByUrl("account/" + this.user._id);
+    this.chatService.leave();
+    this.leaveConnection = this.chatService.getLeave().subscribe(res => {
+      if (res) {this.router.navigateByUrl("account/" + this.user._id);}
+    })
   }
 
   deleteChannel() {
@@ -115,9 +172,13 @@ export class ChannelComponent implements OnInit {
     // this.switchChannel(this.channels[0].channelID);
   }
 
-  switchChannel(channel: number) {
+  switchChannel(channel: string) {
     let url = "channel/" + this.groupID + "/" + channel;
-    this.router.navigateByUrl(url);
+    this.chatService.switch(channel);
+    this.switchConnection = this.chatService.getSwitch().subscribe(res => {
+      if (res) {this.router.navigateByUrl(url);}
+    });
+    
   }
 
   delete(from: string, userID: any) {
@@ -170,29 +231,34 @@ export class ChannelComponent implements OnInit {
   sendChat() {
     const fd = new FormData();
 
+    let chatData = {
+      type: 'message',
+      username: this.user.username,
+      pfp: this.user.pfp,
+      dateTime: new Date().toLocaleString(),
+      message: this.chat.message,
+      images: null
+    }
+
     if (this.chat.imageNum > 0) {
       for (let i = 0; i < this.chat.imageNum; i++) {
         fd.append('images', this.chat.images[i]);
       }
-      this.imageService.chatImgUpload(fd).subscribe(res => {
-        if (res.success) {console.log(res.filenames);}
+      this.imageService.imgUpload(fd).subscribe(res => {
+        if (res.success) {
+          chatData.images = res.filenames;
+          this.chatService.send(chatData);
+          console.log(res.filenames);
+        }
       });
-    }
-    // fd.append('image', this.settings.file, this.settings.file.name);
+    } else {this.chatService.send(chatData);}
 
-    // this.imageService.imgUpload(fd).subscribe(res => {
-    //   if (res.success) {
-    //     // let imagepath = res.filename;
-    //     let data = {
-    //       _id: this.user._id,
-    //       pfp: res.filename
-    //     }
-    //     this.userService.updateUser(data).subscribe(res => {
-    //       if (res.success) {this.closeModal();}
-    //     });
-    //   }
-      // console.log("to serverrrr");
-    // });
+    this.chat = {
+      message: "",
+      images: null,
+      imageNum: 0,
+      imgFilename: null
+    }
   }
 
 }

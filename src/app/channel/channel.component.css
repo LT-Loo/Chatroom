@@ -86,12 +86,18 @@
     width: 30px;
 }
 
-.table-borderless td {
+/* .table-borderless td {
     padding-bottom: 15px;
-}
+} */
 
 .chat-wrapper, .list-wrapper, .member-wrapper {
-    height: 80%;
+    height: 82%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.chat-wrapper {
+    background-color: rgb(211, 251, 255);
 }
 
 ::-webkit-scrollbar {

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 // import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { UserDataService } from '../services/user-data.service';
+import { ChatDataService } from  '../services/chat-data.service';
 
 // const SERVER = "http://localhost:3000";
 
@@ -23,7 +24,8 @@ export class LoginComponent implements OnInit {
   error: boolean = false;
 
   constructor(private router: Router,
-    private service: UserDataService) { }
+    private service: UserDataService,
+    private chatService: ChatDataService) { }
 
   ngOnInit(): void {}
 
@@ -35,6 +37,7 @@ export class LoginComponent implements OnInit {
         this.valid = res.success;
         if (this.valid) {
           sessionStorage.setItem("auth", res.userData._id);
+          // this.chatService.initSocket();
           this.router.navigateByUrl('account/' + res.userData._id);
         }
       });  

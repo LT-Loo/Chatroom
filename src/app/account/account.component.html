@@ -39,16 +39,19 @@
                     <button type = "button" class = "btn btn-primary py-1" (click) = "openModal('newGroup')">Create Group</button>
                 </div>
             </div>
-            <div class = "container bg-transparent text-center p-0 m-auto w-100">
+            <div class = "container bg-transparent text-center p-0 m-auto w-100 mt-2">
                 <div class = "row row-cols-3 row-cols-lg-6 p-0 m-0">
-                    <div *ngFor = "let group of groups" class = "dropdown col-lg pb-5" id = "group" (click) = "openModal('details', group.id)">
-                        <h5>{{ group.value[0].groupname }}</h5>
-                        <img src = "../../assets/img/user.png" class = "img-thumbnail rounded-circle">
+                    <div *ngFor = "let group of groups" class = "col mb-3 px-1" (click) = "openModal('details', group.id)">
+                        <div class = "group text-center border border-dark rounded py-1">
+                            <h5 class = "mb-0">{{ group.value[0].groupname }}</h5>    
+                        </div>
+                        
+                        <!-- <img src = "../../assets/img/user.png" class = "img-thumbnail rounded-circle">
                         <div class = "dropdown-content">
-                            <div *ngFor = "let channel of channels">
+                            <div *ngFor = "let channel of channels" style = "z-index: 1000;">
                                 <a *ngIf = "channel.groupID == group.id" class = "dropdown-item" (click) = "joinChannel(group.id, channel.channelID)">{{ channel.channelName }}</a>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>

@@ -55,6 +55,15 @@
     width: 80px;
 }
 
+.group:hover {
+    background-color:rgba(63, 92, 171, 0.4);
+}
+
+.group:active {
+    background-color:rgba(13, 25, 57, 0.4);
+}
+
+
 #logout {
     position: relative;
 }

@@ -6,6 +6,7 @@ import { v4 as uuid4 } from 'uuid';
 import { UserDataService } from '../services/user-data.service';
 import { GroupChannelDataService } from '../services/group-channel-data.service';
 import { ImageUploadService } from '../services/image-upload.service';
+import { ChatDataService } from '../services/chat-data.service';
 
 @Component({
   selector: 'app-group-details',
@@ -23,6 +24,7 @@ export class GroupDetailsComponent implements OnInit {
   select: string = "";
   selectChn: any = {};
   userList: any[] = [];
+  ioConnection: any;
 
   user: any = {};
   groupID: string = "";
@@ -86,7 +88,8 @@ export class GroupDetailsComponent implements OnInit {
     private router: Router,
     private userService: UserDataService,
     private groupService: GroupChannelDataService,
-    private imageService: ImageUploadService) { }
+    private imageService: ImageUploadService,
+    private chatService: ChatDataService) { }
 
   ngOnInit(): void {
     this.modal = this.fromParent.modal;
@@ -147,8 +150,19 @@ export class GroupDetailsComponent implements OnInit {
   joinChannel() {
     if (this.select == "") {this.select = this.channels[0].channelID;}
     let url = "channel/" + this.group._id + "/" + this.select;
-    this.activeModal.close();
-    this.router.navigateByUrl(url);
+    this.chatService.initSocket();
+    this.chatService.join(this.user.username, this.select);
+    this.ioConnection = this.chatService.getJoin().subscribe(res => {
+      if (res) {
+        this.activeModal.close();
+        // sessionStorage.setItem("currentChannel", this.select);
+        this.router.navigateByUrl(url);
+      }
+    });
+    // this.activeModal.close();
+    // // sessionStorage.setItem("reload", "0");
+    // this.router.navigateByUrl(url);
+    
   }
 
   createUser() {

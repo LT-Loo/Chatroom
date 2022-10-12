@@ -5,6 +5,11 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 
+import { ChatDataService } from './services/chat-data.service';
+import { ImageUploadService } from './services/image-upload.service';
+import { UserDataService } from './services/user-data.service';
+import { GroupChannelDataService } from './services/group-channel-data.service';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -28,7 +33,12 @@ import { ChannelComponent } from './channel/channel.component';
     HttpClientModule,
     CommonModule
   ],
-  providers: [],
+  providers: [
+    ChatDataService,
+    ImageUploadService,
+    UserDataService,
+    GroupChannelDataService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

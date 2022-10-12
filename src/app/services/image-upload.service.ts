@@ -8,7 +8,7 @@ export class ImageUploadService {
 
   constructor(private http: HttpClient) { }
 
-  imgUpload(data: any) {return this.http.post<any>("http://localhost:3000/upload", data);}
+  imgUpload(data: any) {return this.http.post<any>("http://localhost:3000/uploadImages", data);}
 
-  chatImgUpload(data: any) {return this.http.post<any>("http://localhost:3000/uploadImgChat", data);}
+  // chatImgUpload(data: any) {return this.http.post<any>("http://localhost:3000/uploadImgChat", data);}
 }

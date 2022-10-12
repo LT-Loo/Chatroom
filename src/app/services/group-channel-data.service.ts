@@ -18,6 +18,8 @@ export class GroupChannelDataService {
 
   getChannelMembers(id: string) {return this.http.post<any>("http://localhost:3000/getList", {collection: "member", data: {channelID: id}});}
 
+  getChannelData(id: string) {return this.http.post<any>("http://localhost:3000/getChannelData", {id: id});}
+
   getGroupMembers(id: string) {return this.http.post<any>("http://localhost:3000/getList", {collection: "member", data: {groupID: id}});}
 
   getSuper() {return this.http.post<any>("http://localhost:3000/getList", {collection: "user", data: {superOrAdmin: 'super'}});}

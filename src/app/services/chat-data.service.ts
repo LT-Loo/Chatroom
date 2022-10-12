@@ -19,6 +19,7 @@ export class ChatDataService {
 
   // Setup connection to server socket
   initSocket() {
+    console.log("run socker");
     this.socket = io(URL);
     return () => {this.socket.disconnect();}
   }
@@ -29,14 +30,17 @@ export class ChatDataService {
   }
 
   // Request to leave channel
-  leave() {this.socket.emit("leave");}
+  leave() {
+    this.socket.emit("leave", {});
+    // this.socket.disconnect();
+  }
 
   // Request to switch channel
   switch(channelID: string) {this.socket.emit("switch", channelID);}
 
   // Send message
-  send(chatData: any) {
-    this.socket.emit("message");
+  send(chat: any) {
+    this.socket.emit("message", chat);
     // call http to save message
   }
 
@@ -59,7 +63,7 @@ export class ChatDataService {
   }
 
   // Respone for switch request
-  getSwtich() {
+  getSwitch() {
     return new Observable<any>(observer => {
       this.socket.on("switch", (data: any) => {
         observer.next(data);

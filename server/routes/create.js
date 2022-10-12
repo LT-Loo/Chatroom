@@ -43,6 +43,9 @@ module.exports = function(db, app, ObjectID) {
                 console.log("add channel");
                 let newChannel = await db.collection("channel").insertOne(channelData);
 
+                let chatData = {groupID: newGroup.insertedId.toString(), channelID: newChannel.insertedId.toString(), history: []};
+                await db.collection("chat").insertOne(chatData);
+
                 for (let admin of admins) {
                     let memberData = {
                         userID: admin._id.toString(),
@@ -75,6 +78,10 @@ module.exports = function(db, app, ObjectID) {
         let group = await db.collection("group").findOne({_id: new ObjectID(data.groupID)});
 
         let newChannel = await db.collection("channel").insertOne({name: data.name, groupID: data.groupID, dateTime: data.dateTime});
+
+        let chatData = {groupID: data.groupID, channelID: newChannel.insertedId.toString(), history: []};
+        await db.collection("chat").insertOne(chatData);
+
         if (newChannel.acknowledged) {
             console.log("channel added");
             let admins = await db.collection("member").find({$and :[{groupID: data.groupID}, {$or: [{role: "super"}, {role: "admin"}, {role: "assis"}]}]}).toArray();

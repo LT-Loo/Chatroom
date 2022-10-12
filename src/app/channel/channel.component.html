@@ -24,93 +24,31 @@
                 <button id = "open-channel-sidebar" type = "button" class = "btn btn-outline-primary px-2 py-0 mb-2" data-bs-toggle = "offcanvas" data-bs-target = "#channel-listcol"><i class = "bi bi-list"></i></button>
                 <h3 id = "channelname" class = "mt-2">{{ channel.channelName }}</h3>
                 <button id = "open-member-sidebar" type = "button" class = "btn btn-outline-secondary px-2 py-0 mb-2 position-absolute end-0" data-bs-toggle = "offcanvas" data-bs-target = "#memberlistcol"><i class = "bi bi-people-fill"></i></button>    
-                <hr class = "mt-1">
-                <div class = "chat-wrapper overflow-auto d-inline-block w-100">
-                <table class = "table-borderless w-100 mb-0">
-                    <tbody>
-                        <tr>
-                            <td class = "pfp px-0 align-top"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
-                            <td class = "ps-2">
-                                <h6 class = "d-inline-block mb-0">User</h6>
-                                <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>
-                                <p class = "mb-1 ">Hi everyone!<br>hihi<br>hihi</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class = "alert text-center py-0" colspan = "2">
-                                <p class = "m-0">User left/joined the channel.</p>
-                            </td> 
-                        </tr>
-                        <tr>
-                            <td class = "pfp px-0 align-top"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
-                            <td class = "ps-2">
-                                <h6 class = "d-inline-block mb-0">User</h6>
-                                <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>
-                                <p class = "mb-1 text-break">Hi everyonesssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss!</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class = "pfp px-0 align-top"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
-                            <td class = "ps-2">
-                                <h6 class = "d-inline-block mb-0">User</h6>
-                                <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>
-                                <p class = "mb-1">Hi everyone!</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class = "pfp px-0 align-top"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
-                            <td class = "ps-2">
-                                <h6 class = "d-inline-block mb-0">User</h6>
-                                <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>
-                                <p class = "mb-1">Hi everyone!</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class = "pfp px-0 align-top"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
-                            <td class = "ps-2">
-                                <h6 class = "d-inline-block mb-0">User</h6>
-                                <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>
-                                <p class = "mb-1">Hi everyone!</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class = "pfp px-0 align-top"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
-                            <td class = "ps-2">
-                                <h6 class = "d-inline-block mb-0">User</h6>
-                                <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>
-                                <p class = "mb-1">Hi everyone!</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class = "pfp px-0 align-top"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
-                            <td class = "ps-2">
-                                <h6 class = "d-inline-block mb-0">User</h6>
-                                <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>
-                                <p class = "mb-1">Hi everyone!</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class = "pfp px-0 align-top"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
-                            <td class = "ps-2">
-                                <h6 class = "d-inline-block mb-0">User</h6>
-                                <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>
-                                <p class = "mb-1">Hi everyone!</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class = "pfp px-0 align-top"><img src = "../../assets/img/user.png" class = "chat-pfp rounded-circle"></td>
-                            <td class = "ps-2">
-                                <h6 class = "d-inline-block mb-0">User</h6>
-                                <p class = "msg-date d-inline-block ps-2 mb-0">dd mm yyyy hh:mm</p>
-                                <p class = "mb-1">Hi everyone!</p>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <hr class = "my-1">
+                <div class = "chat-wrapper w-100 py-1" #chatbox [scrollTop] = "chatHistory.length === 0 ? 0 : chatbox.scrollHeight">
+                    <div *ngFor = "let chat of chatHistory;" class = "px-0">
+                        <div *ngIf = "chat.type == 'notice'" class = "text-center my-1">
+                            <p class = "m-0 text-secondary" style = "font-size: 15px;">{{ chat.notice }}</p>
+                        </div>
+                        <div *ngIf = "chat.type == 'message'" class = "container w-100 my-1">
+                            <div class = "row py-1">
+                                <div class = "col-2 col-lg-1 text-center px-0">
+                                    <img src = "http://localhost:3000/images/{{ chat.pfp }}" class = "chat-pfp rounded-circle">
+                                </div>
+                                <div class = "col">
+                                    <h6 class = "d-inline-block mb-0">{{ chat.username }}</h6>
+                                    <p class = "msg-date d-inline-block ps-2 mb-0" style = "font-size: 12px;">{{ chat.dateTime }}</p>
+                                    <p class = "mb-1 ">{{ chat.message }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
                 </div>
                 <div class = "row position-absolute bottom-0 w-100 py-3">
                     <div class = "col ps-2 pe-1">
-                        <input class = "form-control" name = "message" placeholder = "Write a message...">   
+                        <input class = "form-control" name = "message" [(ngModel)] = "chat.message" placeholder = "Write a message...">   
                     </div>
                     <div class = "col-2 btn-group text-center px-1">
                         <button *ngIf = "chat.imageNum > 0;" class = "btn btn-danger me-2 rounded" (click) = clearImage()><i class = "bi bi-file-earmark-x-fill"></i></button>

@@ -5,6 +5,7 @@ import * as _ from 'lodash';
 
 import { UserDataService } from '../services/user-data.service';
 import { GroupDetailsComponent } from '../group-details/group-details.component';
+import { ChatDataService } from '../services/chat-data.service';
 
 @Component({
   selector: 'app-account',
@@ -16,13 +17,15 @@ export class AccountComponent implements OnInit {
   constructor(private modalService: NgbModal,
     private router: Router,
     private route: ActivatedRoute,
-    private userService: UserDataService) { }
+    private userService: UserDataService,
+    private chatService: ChatDataService) { }
 
   user: any = {};
   userID: any = "";
   groups: any[] = [];
   channels: any[] = [];
   members: any[] = [];
+  ioConnection: any;
 
   ngOnInit(): void {
 
@@ -37,6 +40,13 @@ export class AccountComponent implements OnInit {
         this.userID = params.get("id");
       }
     );
+
+    // this.chatService.initSocket();
+    // this.ioConnection = this.chatService.getJoin().subscribe(data => {
+    //   if (data) {
+    //     console.log("join"); 
+    //   }
+    // });
 
     // this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
@@ -83,10 +93,17 @@ export class AccountComponent implements OnInit {
     this.router.navigateByUrl("");
   }
 
-  joinChannel(group: string, channel: string) {
-    let url = "channel/" + group + "/" + channel;
-    this.router.navigateByUrl(url);
-  }
+  // joinChannel(group: string, channel: string) {
+  //   console.log("click to join");
+  //   let url = "channel/" + group + "/" + channel;
+  //   this.chatService.initSocket();
+  //   this.chatService.join(this.user.username, channel);
+  //   this.ioConnection = this.chatService.getJoin().subscribe(res => {
+  //     console.log("get something back fom join");
+  //     console.log(res);
+  //     if (res) {this.router.navigateByUrl(url);};
+  //   });
+  // }
 
   openModal(modalName: string, groupID: string = "") {
     const modal = this.modalService.open(GroupDetailsComponent, {

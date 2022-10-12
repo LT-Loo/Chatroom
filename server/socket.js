@@ -1,11 +1,13 @@
 /* Socker for receiving request and returning response */
 
+let roomRecords = {};
+
 module.exports = {
+
     connect: function(io, PORT, db, ObjectID) {
 
         // let rooms = db.collection("channel").find({}, {_id: 1});
-        let roomRecords = {};
-        let username;
+        // let username;
 
         //Receive connection request from client
         io.on("connection", (socket) => {
@@ -21,57 +23,114 @@ module.exports = {
             //     })
             // }
 
+            let username;
+
+            const leaveChannel = async () => {
+                socket.leave(roomRecords[socket.id]); //, () => {
+
+                let channelID = roomRecords[socket.id];
+                console.log(`Socket ${socket.id} left room ${channelID}.`);
+
+                let notice = {
+                    type: 'notice',
+                    notice: `${username} left the channel.`,
+                    dateTime: new Date().toLocaleString()
+                }
+
+                await db.collection("chat").updateOne({channelID: channelID}, {$push: {history: notice}});
+                io.to(channelID).emit("message", notice);
+            }
+
+            const joinChannel = async (channelID) => {
+                socket.join(channelID); //, () => {
+                // roomRecords[socket.id] = data.channelID;
+                // username = data.username;
+                console.log(`Socket ${socket.id} joined room ${channelID}.`);
+
+                let notice = {
+                    type: 'notice',
+                    notice: `${username} has joined the channel.`,
+                    dateTime: new Date().toLocaleString()
+                }
+
+                await db.collection("chat").updateOne({channelID: channelID}, {$push: {history: notice}});
+
+                // socket.emit("join", true);
+                io.to(channelID).emit("message", notice);
+            }
+
             // Receive message from user
-            socket.on("message", (msg) => {
+            socket.on("message", async (data) => {
                 console.log(`Socket ${socket.id} sent a message to room ${roomRecords[socket.id]}`);
                 //save to database
                 //send data to channel user
-                io.to(roomRecords[socket.id]).emit("message", );
+                await db.collection("chat").updateOne({channelID: roomRecords[socket.id]}, {$push: {history: data}});
+                io.to(roomRecords[socket.id]).emit("message", data);
             });
 
-            socket.on("join", (data) => {
+            socket.on("join", async (data) => {
                 //safeJoin(roomID);
-                socket.join(data.channelID, () => {
-                    roomRecords[socket.id] = data.channelID;
-                    username = data.username;
-                    console.log(`${socket.id} joined room ${roomID}.`);
-                    socket.emit("join", true);
-                    io.to(data.channelID).emit("notice", `${data.username} joined the channel.`);
-                    // currentRoom = null;
-                    //Emit to new channel user joined
-                })
+                // console.log("join request", data, socket.id, socket.rooms);
+                // socket.join(data.channelID); //, () => {
+                roomRecords[socket.id] = data.channelID;
+                username = data.username;
+
+                await joinChannel(data.channelID);
+                // let chatHistory = await db.collection("chat").findOne({channelID: data.channelID});
+                socket.emit("join", true);
+                
+                
             });
 
-            socket.on("leave", () => {
-                socket.leave(roomRecords[socket.id], () => {
-                    console.log(`Socket ${socket.id} left room ${roomRecords[socket.id]}.`);
-                    socket.emit("leave", true);
-                    io.to(roomRecords[socket.id]).emit("notice", `${username} left the channel.`);
-                    delete roomRecords[socket.id];
+            socket.on("leave", async () => {
+                await leaveChannel();
+                // socket.leave(roomRecords[socket.id]); //, () => {
+
+                // let channelID = roomRecords[socket.id];
+                // console.log(`Socket ${socket.id} left room ${channelID}.`);
+                // socket.emit("leave", true);
+
+                // let notice = {
+                //     notice: `${username} has left the channel.`,
+                //     dateTime: new Date().toLocaleString()
+                // }
+
+                // db.collection("chat").updateOne({id: channelID}, {$push: {history: notice}});
+
+                socket.emit("leave", true);
+                delete roomRecords[socket.id];
+                socket.disconnect();
+
+                // io.to(channelID).emit("message", notice);
+                
                     // currentRoom = roomID;
-                });
+                //});
                 // Emit to channel user left
             });
 
-            socket.on("switch", (roomID) => {
-                socket.leave(roomRecords[socket.id], () => {
-                    console.log(`Socket ${socket.id} left room ${roomRecords[socket.id]}`);
-                    io.to(roomRecords[socket.id]).emit("notice", `${username} left the channel.`);
-                });
-                socket.join(roomID, () => {
-                    console.log(`Socket ${socket.id} joined room ${roomID}`);
-                    roomRecords[socket.id] = roomID;
-                    socket.emit("switch", true);
-                    io.to(roomID).emit("notice", `${username} joined the channel.`);
-                    // currentRoom = newRoom;
-                })
-                // Emit to old user left
-                // Emit to new user joined
+            socket.on("switch", async (roomID) => {
+                await leaveChannel();
+                await joinChannel(roomID);
+                roomRecords[socket.id] = roomID;
+                socket.emit("switch", true);
+                // socket.disconnect();
             });
 
-            socket.on("disconnect", () => {
-                console.log(`Socket ${socket.id} left room ${roomRecords[socket.id]}.`);
-                io.to(roomRecords[socket.id]).emit("notice", `${username} left the channel.`);
+            socket.on("disconnect", async () => {
+                console.log(`Socket ${socket.id} disconnected.`);
+                // io.to(roomRecords[socket.id]).emit("notice", `${username} left the channel.`);
+
+                let channelID = roomRecords[socket.id];
+                let notice = {
+                    type: "notice",
+                    notice: `${username} has left the channel.`,
+                    dateTime: new Date().toLocaleString()
+                }
+
+                await db.collection("chat").updateOne({channelID: channelID}, {$push: {history: notice}});
+
+                // socket.emit("join", true);
+                io.to(channelID).emit("message", notice);
                 delete roomRecords[socket.id];
                 // Emit to channel user left
             });
@@ -79,8 +138,8 @@ module.exports = {
             socket.on("change", () => {
                 // change on channels? members?
                 // inform user to get new data from database
-            })
+            });
 
-        })
+        });
     }
 }
