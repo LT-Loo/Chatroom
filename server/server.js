@@ -40,7 +40,7 @@ app.use('/images', express.static(path.join(__dirname, "./images")));
 const PORT = 3000;
 
 // Connect to MongoClient
-const URL = "mongodb://localhost:27017";
+const URL = "mongodb://127.0.0.1:27017";
 MongoClient.connect(URL, {useNewUrlParser: true, useUnifiedTopology: true}, function(err, client) {
 
     if (err) {return console.log(err);}

@@ -42,7 +42,7 @@ module.exports = function(db, app, ObjectID) {
         let userChg = await db.collection("user").updateOne({_id: user._id}, {$set: {superOrAdmin: data.role}});
 
         let mbrChg = {}; // Update member (in group) role if necessary
-        if (data.role == "super") {mbrChg = await db.collection("member").updateMany({userID: user._id.toString()}, {$set: {role: data.role}});}
+        if (data.role == "super") {mbrChg = await db.collection("member").updateMany({userID: user._id.toString()}, {$set: {superOrAdmin: data.role}});}
         else {mbrChg.acknowledged = true;}
         
         let updateUser = await db.collection("user").findOne({username: data.username});
